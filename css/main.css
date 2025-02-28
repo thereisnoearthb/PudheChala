@@ -1,0 +1,175 @@
+.gallery-cell {
+  width: 100%;
+ 
+}
+.gallery-cell:before {
+  display: block;
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
+}
+.flickity-button{
+  background: transparent;
+}
+.org-logo {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.org-img-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 0;
+}
+
+.org-img {
+  border-radius: 100%;
+  width: 75%;
+  max-width: 10em;
+}
+
+.img-link {
+  text-align: center;
+  margin-top: 15%;
+  color: black;
+  font-size: 13px;
+}
+
+.carousel-wrapper {
+  position: relative;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.carousel {
+  height: 100% !important;
+  display: inline-block;
+  min-height: 100;
+}
+
+.carousel-items {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  height: auto;
+}
+
+/* .arrow {
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 12px;
+}
+
+.arrow-prev {
+  left: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(135deg);
+}
+
+.arrow-next {
+  right: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+} */
+
+.light {
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    height: ;
+    min-height: 300px !important;
+    max-height: 440px !important;
+  }
+
+  /* .arrow,
+  .light .arrow {
+    background-size: 10px;
+    background-position: 10px 50%;
+  } */
+}
+
+/*Select every element*/
+
+
+.card .card-image img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* .item-1 {
+  z-index: 2;
+  opacity: 1;
+}
+
+*:target~.item-1 {
+  opacity: 0;
+}
+
+#item-1:target~.item-1 {
+  opacity: 1;
+}
+
+#item-2:target~.item-2,
+#item-3:target~.item-3,
+#item-4:target~.item-4,
+#item-5:target~.item-5,
+#item-6:target~.item-6,
+#item-7:target~.item-7,
+#item-8:target~.item-8 {
+  z-index: 3;
+  opacity: 1;
+} */
+
+.row {
+  display: flex;
+}
+
+.column {
+  width: 33.3%;
+  text-align: center;
+}
+
+.card-content {
+  text-align: justify;
+}
+
+.btn-floating.btn-large.halfway-fab {
+  bottom: 1.2em !important;
+}
+.fa {
+    padding: 5px;
+    font-size: 15px !important;
+    border-radius: 5%;
+    text-decoration: none;
+    margin: 5px 2px;
+    background: #55ACEE !important;
+    color: white !important;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+#emailInput{
+  color: black !important;
+  font-size: 15px !important;
+}
+/* .fa-twitter {
+  background: #55ACEE;
+  color: white;
+} */

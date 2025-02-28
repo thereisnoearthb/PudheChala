@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Campaign Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.2/quill.snow.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .editor-section, .preview-section {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .editor-section {
+            max-width: 500px;
+        }
+
+        .editor-section label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .editor-section input[type="text"],
+        .editor-section input[type="url"],
+        .editor-section input[type="file"] {
+            width: 95%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .editor-section .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        iframe {
+            width: 100%;
+            height: 95%;
+            border: none;
+        }
+
+        #buttons-container {
+            margin-top: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button-group input {
+            flex: 1;
+        }
+
+        #file-upload-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .image-upload-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-upload-container input {
+            flex: 1;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .add-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 18px;
+            line-height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .add-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Campaign Editor</h1>
+    </header>
+    
+    <div id="file-upload-container">
+        <label for="html-file-input">Select template.html:</label>
+        <input type="file" id="html-file-input" accept=".html">
+    </div>
+
+    <main>
+        <!-- Editor Section -->
+        <div class="editor-section">
+            <h2>Edit Campaign</h2>
+            
+            <!-- Page Title and Meta -->
+            <label for="page-title-input">Campaign Title</label>
+            <input type="text" id="page-title-input" placeholder="Enter campaign title">
+
+            <label for="meta-description-input">Meta Description</label>
+            <input type="text" id="meta-description-input" placeholder="Enter meta description">
+
+            <label for="og-image-input">Social Preview Image</label>
+            <input type="url" id="og-image-input" placeholder="Enter Social Preview image URL">
+
+
+            <!-- Image Uploads -->
+            <div class="section-header">
+                <label>Campaign Images</label>
+                <button type="button" id="add-image-btn" class="add-btn">+</button>
+            </div>
+            <div id="image-uploads-container">
+                <!-- Will be populated dynamically -->
+            </div>
+
+            <!-- Paragraphs -->
+            <label for="paragraph1-editor">Paragraph 1</label>
+            <div id="paragraph1-editor" style="height: 150px; background-color: #fff; border: 1px solid #ccc;"></div>
+            <!-- Social Links -->
+            <label for="social-links">Social Links</label>
+            <input type="url" id="email-link-input" placeholder="Email Link">
+            <input type="url" id="twitter-link-input" placeholder="Twitter Link">
+            <input type="url" id="whatsapp-link-input" placeholder="WhatsApp Link">
+            <input type="url" id="instagram-link-input" placeholder="Instagram Link">
+
+            <!-- Buttons -->
+            <div id="buttons-container">
+                <div class="section-header">
+                    <label>Link Buttons</label>
+                    <button type="button" id="add-button-btn" class="add-btn">+</button>
+                </div>
+                <div id="button-groups-container">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <button id="download-btn">Download HTML</button> It will be saved as updated-campaign.html
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section">
+            <h2>Preview</h2>
+            <iframe id="preview-frame" title="Campaign Preview"></iframe>
+        </div>
+    </main>
+
+    <!-- Quill Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.2/quill.min.js"></script>
+
+    <!-- Editor Script -->
+    <script>
+        const paragraph1Editor = new Quill('#paragraph1-editor', { theme: 'snow' });
+        let currentHTML = '';
+
+        const htmlFileInput = document.getElementById('html-file-input');
+        const pageTitleInput = document.getElementById('page-title-input');
+        const metaDescriptionInput = document.getElementById('meta-description-input');
+        const ogImageInput = document.getElementById('og-image-input');
+        const previewFrame = document.getElementById('preview-frame');
+
+        // Image inputs
+        const imageContainer = document.getElementById('image-uploads-container');
+
+        // Button inputs
+        const buttonContainer = document.getElementById('button-groups-container');
+
+        function createImageInputs(index) {
+            const div = document.createElement('div');
+            div.className = 'image-upload-container';
+            div.innerHTML = `
+                <input type="text" id="image${index}-input" placeholder="Image ${index} URL">
+                <input type="text" id="image${index}-alt-input" placeholder="Image ${index} Alt Text">
+            `;
+            return div;
+        }
+
+        function createButtonInputs(index) {
+            const div = document.createElement('div');
+            div.className = 'button-group';
+            div.innerHTML = `
+                <input type="text" class="button-text" placeholder="Button ${index} Text">
+                <input type="url" class="button-link" placeholder="Button ${index} Link">
+            `;
+            return div;
+        }
+
+        htmlFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentHTML = e.target.result;
+                    
+                    // Parse the loaded HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(currentHTML, 'text/html');
+
+                    // Clear existing containers
+                    imageContainer.innerHTML = '';
+                    buttonContainer.innerHTML = '';
+
+                    // Count and generate image input fields
+                    const imageSlides = doc.querySelectorAll('.swiper-slide');
+                    const imageCount = Math.max(imageSlides.length, 1);
+
+                    for (let i = 1; i <= imageCount; i++) {
+                        const div = createImageInputs(i);
+                        imageContainer.appendChild(div);
+                    }
+
+                    // Count and generate button input fields
+                    const linkButtons = doc.querySelectorAll('.link-button');
+                    const buttonCount = Math.max(linkButtons.length, 1);
+
+                    for (let i = 1; i <= buttonCount; i++) {
+                        const div = createButtonInputs(i);
+                        buttonContainer.appendChild(div);
+                    }
+
+                    // Load the content into the editor
+                    loadHTMLIntoEditor(currentHTML);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function loadHTMLIntoEditor(htmlContent) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+
+            // Update page title input
+            const pageTitle = doc.querySelector('.page-title');
+            pageTitleInput.value = pageTitle ? pageTitle.textContent : '';
+
+            // Update meta description
+            const metaDescription = doc.querySelector('meta[name="description"]');
+            metaDescriptionInput.value = metaDescription ? metaDescription.getAttribute('content') : '';
+
+            // Update OG Image
+            const ogImageTag = doc.querySelector('meta[property="og:image"]');
+            ogImageInput.value = ogImageTag ? ogImageTag.getAttribute('content') : '';
+
+            // Update images
+            const images = doc.querySelectorAll('.swiper-slide img');
+            images.forEach((img, index) => {
+                const imageInput = imageContainer.querySelector(`#image${index + 1}-input`);
+                if (imageInput) imageInput.value = img.src;
+                const imageAltInput = imageContainer.querySelector(`#image${index + 1}-alt-input`);
+                if (imageAltInput) imageAltInput.value = img.alt;
+            });
+
+            // Update paragraphs
+            const paragraphs = doc.querySelectorAll('.card-text');
+            if (paragraphs[0]) paragraph1Editor.root.innerHTML = paragraphs[0].innerHTML;
+
+            // Update social links
+            const socialLinks = {
+                email: doc.querySelector('.email-btn'),
+                twitter: doc.querySelector('.twitter-btn'),
+                whatsapp: doc.querySelector('.whatsapp-btn'),
+                instagram: doc.querySelector('.instagram-btn')
+            };
+
+            document.getElementById('email-link-input').value = socialLinks.email ? socialLinks.email.href : '';
+            document.getElementById('twitter-link-input').value = socialLinks.twitter ? socialLinks.twitter.href : '';
+            document.getElementById('whatsapp-link-input').value = socialLinks.whatsapp ? socialLinks.whatsapp.href : '';
+            document.getElementById('instagram-link-input').value = socialLinks.instagram ? socialLinks.instagram.href : '';
+
+            // Update buttons
+            const buttons = doc.querySelectorAll('.link-button');
+            buttons.forEach((button, index) => {
+                const buttonGroup = buttonContainer.querySelectorAll('.button-group')[index];
+                if (buttonGroup) {
+                    const buttonTextInput = buttonGroup.querySelector('.button-text');
+                    const buttonLinkInput = buttonGroup.querySelector('.button-link');
+                    if (buttonTextInput) buttonTextInput.value = button.textContent.trim();
+                    if (buttonLinkInput) buttonLinkInput.value = button.href;
+                }
+            });
+
+            updatePreview();
+        }
+
+        function updatePreview() {
+            if (!currentHTML) return;
+
+            const doc = new DOMParser().parseFromString(currentHTML, 'text/html');
+
+            // Update Title
+            const pageTitle = doc.querySelector('.page-title');
+            if (pageTitle) pageTitle.textContent = pageTitleInput.value;
+
+            // Update Meta Description
+            const metaDescription = doc.querySelector('meta[name="description"]');
+            if (metaDescription) metaDescription.setAttribute('content', metaDescriptionInput.value);
+            
+            // Update OG Image
+            const ogImageTag = doc.querySelector('meta[property="og:image"]');
+            if (ogImageTag) ogImageTag.setAttribute('content', ogImageInput.value);
+
+            // Update Title Tag
+            const titleTag = doc.querySelector('title');
+            if (titleTag) titleTag.textContent = pageTitleInput.value;
+
+            // Update Images
+            const swiperWrapper = doc.querySelector('.swiper-wrapper');
+            if (swiperWrapper) {
+                // Clear existing slides
+                swiperWrapper.innerHTML = '';
+                
+                // Add all current images
+                const imageInputs = imageContainer.querySelectorAll('.image-upload-container');
+                imageInputs.forEach((container, index) => {
+                    const urlInput = container.querySelector(`#image${index + 1}-input`);
+                    const altInput = container.querySelector(`#image${index + 1}-alt-input`);
+                    
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    slide.innerHTML = `<img src="${urlInput.value || ''}" alt="${altInput.value || `Campaign Image ${index + 1}`}" loading="lazy">`;
+                    swiperWrapper.appendChild(slide);
+                });
+            }
+
+            // Update Paragraphs
+            const paragraphs = doc.querySelectorAll('.card-text');
+            if (paragraphs[0]) paragraphs[0].innerHTML = paragraph1Editor.root.innerHTML;
+
+            // Update Social Links
+            const socialLinks = {
+                email: doc.querySelector('.email-btn'),
+                twitter: doc.querySelector('.twitter-btn'),
+                whatsapp: doc.querySelector('.whatsapp-btn'),
+                instagram: doc.querySelector('.instagram-btn')
+            };
+
+            if (socialLinks.email) socialLinks.email.href = document.getElementById('email-link-input').value;
+            if (socialLinks.twitter) socialLinks.twitter.href = document.getElementById('twitter-link-input').value;
+            if (socialLinks.whatsapp) socialLinks.whatsapp.href = document.getElementById('whatsapp-link-input').value;
+            if (socialLinks.instagram) socialLinks.instagram.href = document.getElementById('instagram-link-input').value;
+
+            // Update Buttons
+            const buttonsContainer = doc.querySelector('.link-button').parentNode;
+            if (buttonsContainer) {
+                // Remove existing buttons
+                doc.querySelectorAll('.link-button').forEach(btn => btn.remove());
+                
+                // Add all current buttons
+                const buttonGroups = buttonContainer.querySelectorAll('.button-group');
+                buttonGroups.forEach(group => {
+                    const textInput = group.querySelector('.button-text');
+                    const linkInput = group.querySelector('.button-link');
+                    
+                    if (textInput && linkInput) {
+                        const button = document.createElement('a');
+                        button.className = 'link-button';
+                        button.target = '_blank';
+                        button.rel = 'noopener noreferrer';
+                        button.href = linkInput.value || '#';
+                        button.textContent = textInput.value || '';
+                        buttonsContainer.appendChild(button);
+                    }
+                });
+            }
+
+            previewFrame.srcdoc = doc.documentElement.outerHTML;
+
+            // Reinitialize Swiper if needed
+            const swiper = previewFrame.contentWindow?.swiper;
+            if (swiper) {
+                setTimeout(() => {
+                    swiper.update();
+                }, 100);
+            }
+        }
+
+        // Add event listeners for live updates
+        document.querySelectorAll('input').forEach(input => input.addEventListener('input', updatePreview));
+        paragraph1Editor.on('text-change', updatePreview);
+
+        // Add event listeners for the add buttons
+        document.getElementById('add-image-btn').addEventListener('click', () => {
+            const currentCount = imageContainer.querySelectorAll('.image-upload-container').length;
+            const newIndex = currentCount + 1;
+            
+            // Add new input fields
+            const newInputs = createImageInputs(newIndex);
+            imageContainer.appendChild(newInputs);
+
+            // Update template HTML with new empty image slide
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(currentHTML, 'text/html');
+            const swiperWrapper = doc.querySelector('.swiper-wrapper');
+            
+            if (swiperWrapper) {
+                const newSlide = document.createElement('div');
+                newSlide.className = 'swiper-slide';
+                newSlide.innerHTML = `<img src="" alt="Campaign Image ${newIndex}" loading="lazy">`;
+                swiperWrapper.appendChild(newSlide);
+                currentHTML = doc.documentElement.outerHTML;
+                updatePreview();
+            }
+
+            // Add event listeners to new inputs
+            newInputs.querySelectorAll('input').forEach(input => 
+                input.addEventListener('input', updatePreview)
+            );
+        });
+
+        document.getElementById('add-button-btn').addEventListener('click', () => {
+            const currentCount = buttonContainer.querySelectorAll('.button-group').length;
+            const newIndex = currentCount + 1;
+            
+            // Add new input fields
+            const newInputs = createButtonInputs(newIndex);
+            document.getElementById('button-groups-container').appendChild(newInputs);
+
+            // Update template HTML with new empty button
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(currentHTML, 'text/html');
+            const lastButton = doc.querySelector('.link-button:last-child');
+            
+            if (lastButton) {
+                const newButton = document.createElement('a');
+                newButton.className = 'link-button';
+                newButton.href = '';
+                newButton.textContent = '';
+                lastButton.parentNode.insertBefore(newButton, lastButton.nextSibling);
+                currentHTML = doc.documentElement.outerHTML;
+                updatePreview();
+            }
+
+            // Add event listeners to new inputs
+            newInputs.querySelectorAll('input').forEach(input => 
+                input.addEventListener('input', updatePreview)
+            );
+        });
+
+        // Download button functionality
+        document.getElementById('download-btn').addEventListener('click', () => {
+            if (!currentHTML) {
+                alert('Please load an HTML file first');
+                return;
+            }
+
+            const blob = new Blob([previewFrame.srcdoc], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'updated-campaign.html';
+            link.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <script>
+      (() => {
+        const sites = [
+          'androidmail.html', 'iphonemail.html'
+        ];
+
+        const iOS =
+          /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+          !window.MSStream;
+
+        if (iOS)
+          location.href = sites[1];
+        else
+          location.href = sites[0];
+      })();
+    </script>
+  </body>
+
+</html>
