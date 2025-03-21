@@ -77,13 +77,14 @@
         }
 
         .tiny-banner{
+            display: none !important;
             margin: 0 auto;
             font-size: 16px;
             color: #FFD000;
             background-color: #000000;
             position: relative;
             top: -20px;
-            margin-bottom: -40px;
+            /* margin-bottom: -40px; */
             z-index: 9;
             display: flex;
             flex-direction: row;
@@ -99,17 +100,16 @@
         /* Card Styles */
         .campaign-card {
             background-color: #fff;
-            border-radius: 15px;
+            border-radius: 16px;
             /* box-shadow: 0 4px 6px rgba(0,0,0,0.1); */
             width: 100%;
-            max-width: 350px;
+            max-width: 314px;
             overflow: hidden;
-            margin-bottom: 20px;
             /* Override */
             background: #FFFFFF;
             border: 1px solid #000000;
             border-radius: 13px;
-            padding: 20px 30px;
+            padding: 30px 29.5px 25px 29.5px;
             position: relative;
 
         }
@@ -131,15 +131,16 @@
         }
 
         .card-text {
-            margin-bottom: 15px;
-            line-height: 1.6;
+            margin: 10px 0;
+            font-size: 12px;
+            /* line-height: 1.6; */
         }
 
         /* Social Button Styles */
         .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 25px;
+            gap: 15px;
             /* padding: 15px 0; */
         }
 
@@ -171,6 +172,15 @@
         .link-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .swiper-pagination-bullet {
+            display: inline-block;
+            border: 1px solid #6525F9;
+            background: none;
+            opacity: var(--swiper-pagination-bullet-inactive-opacity, .9);
+        }
+        .swiper-pagination-bullet-active{
+            background: #6525F9 !important;
         }
     </style>
 </head>
@@ -211,7 +221,7 @@
                 How can we make it better?<br>
                 Are buses functioning the way they’re supposed to?<br>
                 Who gets affected when they don’t function the way they’re supposed to?
-                These are just some questions we at <a href="https://www.instagram.com/pudhe_chala/" style="text-decoration: none;">@pudhe_chala</a> will be asking!<br>
+                These are just some questions we at <a href="https://www.instagram.com/pudhe_chala/" style="text-decoration: none;">@pudhe_chala</a> will be asking!<br><br>
                 Are you ready for a very bumpy ride? Because the truth and its consequences are not pretty.</p>
             </div>
         </div>
@@ -242,7 +252,7 @@
 
             <a href=""
                 target="_blank" rel="noopener noreferrer">
-                <svg width="50" height="50" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
+                <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
                     <rect width="45" height="45" rx="22.5" fill="#FF6767" class="social-button"/>
                     <rect x="4.5" y="3" width="36" height="36" fill="url(#pattern0_76_36)"/>
                     <defs>
@@ -256,7 +266,7 @@
             
             <a href=""
                 target="_blank" rel="noopener noreferrer">
-                <svg width="50" height="50" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
+                <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
                     <rect width="45" height="45" rx="22.5" fill="#FF6767" class="social-button"/>
                     <rect x="11" y="11.5" width="23" height="23" fill="url(#pattern0_76_38)"/>
                     <defs>
@@ -270,7 +280,7 @@
 
             <a href="https://www.instagram.com/p/DGqcXOuSU2Q/?img_index=1"
                 target="_blank" rel="noopener noreferrer">
-                <svg width="50" height="50" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
+                <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
                     <rect width="45" height="45" rx="22.5" fill="#FF6767" class="social-button"/>
                     <rect x="11.5" y="11.5" width="22" height="22" fill="url(#pattern0_76_42)"/>
                     <defs>
@@ -285,7 +295,7 @@
             <a href=""
                 target="_blank" rel="noopener noreferrer"
                 aria-label="Instagram Button">
-                <svg width="50" height="50" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
+                <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="social-icon">
                     <rect width="45" height="45" rx="22.5" fill="#FF6767" class="social-button"/>
                     <rect x="7.5" y="8.5" width="30" height="30" fill="url(#pattern0_76_40)"/>
                     <defs>
