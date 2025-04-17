@@ -183,6 +183,28 @@
             background: #6525F9 !important;
         }
 
+        /* Swiper left and right button styling */
+        .swiper-button-next,
+        .swiper-button-prev {
+            width: 25px; /* Size of the circular button */
+            height: 25px;
+            background-color: #ff6767;
+            border-radius: 50%; /* Circular shape */
+        }
+
+        /* Arrow within the button */
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 16px; /* Adjust arrow icon size */
+            font-weight: bold;
+            color: black;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: #cc5252; /* Darker red on hover */
+        }
+
         /* Translate Button Styling */
         #google_translate_element {
             text-align: center;
@@ -228,6 +250,8 @@
                 <div class="swiper-slide"><img src="/pictures/g.webp"
                         alt="Save Nicobar Image" loading="lazy"></div>
             </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
             <div class="swiper-pagination"></div>
         </div>
 
@@ -285,6 +309,10 @@
             new Swiper('.swiper', {
                 pagination: {
                     el: '.swiper-pagination',
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
                 },
                 touchEventsTarget: 'container',
                 a11y: {
