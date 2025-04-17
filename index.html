@@ -65,41 +65,50 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            padding-top: 40px;            
+            /* padding: 20px; */
+            /* padding-top: 40px; */
+        }
+
+         /* Container for the logo with shadow */
+         .logo-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
         }
 
         /* Title Styles */
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+            width: 100%;
+        }
+
         .page-title {
+            margin-top: 0.7em;
             font-family: 'Sulphur Point', sans-serif;
             font-style: normal;
             font-weight: 700;
-            font-size: 47.5385px;
-            line-height: 48px;
+            font-size: 3rem;
+            line-height: 1;
             color: #42367D;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        .tiny-banner{
-            display: none !important;
-            margin: 0 auto;
-            font-size: 16px;
-            color: #FFD000;
-            background-color: #000000;
-            position: relative;
-            top: -20px;
-            /* margin-bottom: -40px; */
-            z-index: 9;
+        .page-subtitle {
+            font-family: 'Sulphur Point';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1;
             display: flex;
-            flex-direction: row;
-            justify-content: center;
             align-items: center;
-            padding: 28px 24px;
-            gap: 10px;
-            width: fit-content;
-            height: 42px;
-            border-radius: 8px;
+            text-align: center;
+            letter-spacing: -0.01em;
+            color: #42367D;
         }
 
         /* Card Styles */
@@ -226,8 +235,16 @@
 </head>
 
 <body>
-    <h1 class="page-title">PUDHE CHALA</h1>
 
+    <header class="page-header">
+        <div class="logo-container">
+            <img src="assets/pudhe-chala-logo.svg" alt="Pudhe Chala logo"/>
+        </div>
+        <h1 class="page-title">PUDHE CHALA</h1>
+        <h2 class="page-subtitle">Mumbai Youth Mobility Campaign</h2>
+    </header>
+
+    <!-- Google Translate Elements -->
     <div id="google_translate_element"></div>
     <p class="translate-disclaimer">
       Translation is machine generated and may not be accurate.
