@@ -231,6 +231,41 @@
             margin-top: 5px;
             margin-bottom: 20px;
         }
+
+        /* Scroll to Top Button Styles */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2.2rem;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #FFD900;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+        }
+
+        /* Styles for Desktop (e.g., screens wider than 768px) */
+        @media (min-width: 768px) {
+            #scrollTopBtn {
+                /* Override properties for desktop */
+                bottom: 8rem;
+                right: 53rem;
+            }
+        }
+
+        #scrollTopBtn img {
+            width: 45px;
+            height: 45px;
+            display: block;
+            margin: auto;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #ccad00;
+        }
     </style>
 </head>
 
@@ -323,6 +358,10 @@
         Hello World
     </a>
 
+    <!-- Scroll to top -->
+    <button id="scrollTopBtn" title="Go to top" type="button">
+        <img src="assets/scrollUp-icon.svg" alt="Scroll to top">
+    </button>
 
 
     <!-- External JavaScript -->
@@ -363,5 +402,23 @@
         type="text/javascript"
         src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
     ></script>
+    <script>
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+    
+        window.onscroll = function() {scrollFunction()};
+    
+        // Button appears only after scrolling down by 20px
+        function scrollFunction() {
+          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollTopBtn.style.display = "block";
+          } else {
+            scrollTopBtn.style.display = "none";
+          }
+        }
+    
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+    </script>
 </body>
 </html>
