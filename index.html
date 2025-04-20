@@ -417,6 +417,10 @@
         // Initialize Swiper
         document.addEventListener('DOMContentLoaded', function () {
             new Swiper('.swiper', {
+                effect: 'fade',
+                fadeEffect: {
+                    crossFade: true,
+                },
                 pagination: {
                     el: '.swiper-pagination',
                 },
