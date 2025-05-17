@@ -244,6 +244,63 @@
         const ogImageInput = document.getElementById('og-image-input');
         const previewFrame = document.getElementById('preview-frame');
 
+        // Function to process HTML content and populate the editor
+        function processAndLoadHtmlContent(htmlString) {
+            currentHTML = htmlString;
+
+            // Parse the loaded HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(currentHTML, 'text/html');
+
+            // Clear existing containers
+            imageContainer.innerHTML = '';
+            buttonContainer.innerHTML = '';
+
+            // Count and generate image input fields
+            const imageSlides = doc.querySelectorAll('.swiper-slide');
+            const imageCount = Math.max(imageSlides.length, 1); // Ensure at least one set of inputs
+
+            for (let i = 1; i <= imageCount; i++) {
+                const div = createImageInputs(i);
+                imageContainer.appendChild(div);
+                // Add event listeners to newly created inputs for live preview
+                div.querySelectorAll('input').forEach(input =>
+                    input.addEventListener('input', updatePreview)
+                );
+            }
+
+            // Count and generate button input fields
+            const linkButtons = doc.querySelectorAll('.link-button');
+            const buttonCount = Math.max(linkButtons.length, 1); // Ensure at least one set of inputs
+
+            for (let i = 1; i <= buttonCount; i++) {
+                const div = createButtonInputs(i);
+                buttonContainer.appendChild(div);
+                // Add event listeners to newly created inputs for live preview
+                div.querySelectorAll('input').forEach(input =>
+                    input.addEventListener('input', updatePreview)
+                );
+            }
+
+            // Load the content into the editor fields
+            loadHTMLIntoEditor(currentHTML); // This function also calls updatePreview
+        }
+
+        // Function to load the default template (index.html)
+        async function loadDefaultTemplate() {
+            try {
+                const response = await fetch('index.html'); // Assumes index.html is in the same directory
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}. Failed to load default template 'index.html'. Please select a template manually.`);
+                }
+                const htmlContent = await response.text();
+                processAndLoadHtmlContent(htmlContent);
+            } catch (error) {
+                console.error(error.message);
+                // Editor will remain in its initial state, user can use the file input.
+            }
+        }
+
         // Image inputs
         const imageContainer = document.getElementById('image-uploads-container');
 
@@ -347,36 +404,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    currentHTML = e.target.result;
-                    
-                    // Parse the loaded HTML
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(currentHTML, 'text/html');
-
-                    // Clear existing containers
-                    imageContainer.innerHTML = '';
-                    buttonContainer.innerHTML = '';
-
-                    // Count and generate image input fields
-                    const imageSlides = doc.querySelectorAll('.swiper-slide');
-                    const imageCount = Math.max(imageSlides.length, 1);
-
-                    for (let i = 1; i <= imageCount; i++) {
-                        const div = createImageInputs(i);
-                        imageContainer.appendChild(div);
-                    }
-
-                    // Count and generate button input fields
-                    const linkButtons = doc.querySelectorAll('.link-button');
-                    const buttonCount = Math.max(linkButtons.length, 1);
-
-                    for (let i = 1; i <= buttonCount; i++) {
-                        const div = createButtonInputs(i);
-                        buttonContainer.appendChild(div);
-                    }
-
-                    // Load the content into the editor
-                    loadHTMLIntoEditor(currentHTML);
+                    processAndLoadHtmlContent(e.target.result);
                 };
                 reader.readAsText(file);
             }
@@ -637,6 +665,9 @@
             link.download = 'updated-campaign.html';
             link.click();
         });
+        
+        // Load index.html by default when the page loads
+        document.addEventListener('DOMContentLoaded', loadDefaultTemplate);
     </script>
 </body>
 </html>
