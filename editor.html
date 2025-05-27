@@ -72,6 +72,10 @@
             margin-top: 20px;
         }
 
+        #social-links-container {
+            margin-top: 20px;
+        }
+
         .button-group {
             display: flex;
             gap: 10px;
@@ -125,6 +129,42 @@
         .add-btn:hover {
             background: #45a049;
         }
+
+        .button-group {
+            position: relative;
+            padding: 8px;
+            align-items: center;
+            margin: 5px 0;
+            background: #f8f8f8;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .button-group.dragging {
+            opacity: 0.5;
+            background: #e0e0e0;
+        }
+
+        .drag-handle {
+            cursor: move;
+            padding: 0 10px;
+            user-select: none;
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -165,12 +205,22 @@
             <!-- Paragraphs -->
             <label for="paragraph1-editor">Paragraph 1</label>
             <div id="paragraph1-editor" style="height: 150px; background-color: #fff; border: 1px solid #ccc;"></div>
+            
             <!-- Social Links -->
-            <label for="social-links">Social Links</label>
-            <input type="url" id="email-link-input" placeholder="Email Link">
-            <input type="url" id="twitter-link-input" placeholder="Twitter Link">
-            <input type="url" id="whatsapp-link-input" placeholder="WhatsApp Link">
-            <input type="url" id="instagram-link-input" placeholder="Instagram Link">
+             <div id="social-links-container">
+
+                <label for="email-link-input">Email</label>
+                <input type="url" id="email-link-input" placeholder="Email Link">
+
+                <label for="twitter-link-input">Twitter</label>
+                <input type="url" id="twitter-link-input" placeholder="Twitter Link">
+
+                <label for="whatsapp-link-input">WhatsApp</label>
+                <input type="url" id="whatsapp-link-input" placeholder="WhatsApp Link">
+
+                <label for="instagram-link-input">Instagram</label>
+                <input type="url" id="instagram-link-input" placeholder="Instagram Link">
+             </div>
 
             <!-- Buttons -->
             <div id="buttons-container">
@@ -208,6 +258,63 @@
         const ogImageInput = document.getElementById('og-image-input');
         const previewFrame = document.getElementById('preview-frame');
 
+        // Function to process HTML content and populate the editor
+        function processAndLoadHtmlContent(htmlString) {
+            currentHTML = htmlString;
+
+            // Parse the loaded HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(currentHTML, 'text/html');
+
+            // Clear existing containers
+            imageContainer.innerHTML = '';
+            buttonContainer.innerHTML = '';
+
+            // Count and generate image input fields
+            const imageSlides = doc.querySelectorAll('.swiper-slide');
+            const imageCount = Math.max(imageSlides.length, 1); // Ensure at least one set of inputs
+
+            for (let i = 1; i <= imageCount; i++) {
+                const div = createImageInputs(i);
+                imageContainer.appendChild(div);
+                // Add event listeners to newly created inputs for live preview
+                div.querySelectorAll('input').forEach(input =>
+                    input.addEventListener('input', updatePreview)
+                );
+            }
+
+            // Count and generate button input fields
+            const linkButtons = doc.querySelectorAll('.link-button');
+            const buttonCount = Math.max(linkButtons.length, 1); // Ensure at least one set of inputs
+
+            for (let i = 1; i <= buttonCount; i++) {
+                const div = createButtonInputs(i);
+                buttonContainer.appendChild(div);
+                // Add event listeners to newly created inputs for live preview
+                div.querySelectorAll('input').forEach(input =>
+                    input.addEventListener('input', updatePreview)
+                );
+            }
+
+            // Load the content into the editor fields
+            loadHTMLIntoEditor(currentHTML); // This function also calls updatePreview
+        }
+
+        // Function to load the default template (index.html)
+        async function loadDefaultTemplate() {
+            try {
+                const response = await fetch('index.html'); // Assumes index.html is in the same directory
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}. Failed to load default template 'index.html'. Please select a template manually.`);
+                }
+                const htmlContent = await response.text();
+                processAndLoadHtmlContent(htmlContent);
+            } catch (error) {
+                console.error(error.message);
+                // Editor will remain in its initial state, user can use the file input.
+            }
+        }
+
         // Image inputs
         const imageContainer = document.getElementById('image-uploads-container');
 
@@ -217,58 +324,101 @@
         function createImageInputs(index) {
             const div = document.createElement('div');
             div.className = 'image-upload-container';
+            div.draggable = true; // Make draggable
+            div.dataset.index = index; // Store original index
+
             div.innerHTML = `
+                <span class="drag-handle">☰</span>
                 <input type="text" id="image${index}-input" placeholder="Image ${index} URL">
                 <input type="text" id="image${index}-alt-input" placeholder="Image ${index} Alt Text">
+                <button class="delete-btn" title="Delete button">×</button>
             `;
+            div.querySelectorAll("input").forEach((input) => {
+                input.addEventListener("input", updatePreview);
+            });
+
+            // Add drag event listeners
+            div.addEventListener("dragstart", handleDragStart);
+            div.addEventListener("dragover", handleDragOver);
+            div.addEventListener("drop", handleDrop);
+            div.addEventListener("dragend", handleDragEnd);
+
+            // Add delete button listener
+            div.querySelector(".delete-btn").addEventListener("click", () => {
+                div.remove();
+                updatePreview();
+            });
             return div;
         }
 
         function createButtonInputs(index) {
             const div = document.createElement('div');
             div.className = 'button-group';
+            div.draggable = true; // Make draggable
+            div.dataset.index = index; // Store original index
+
             div.innerHTML = `
+                <span class="drag-handle">☰</span>
                 <input type="text" class="button-text" placeholder="Button ${index} Text">
                 <input type="url" class="button-link" placeholder="Button ${index} Link">
+                <button class="delete-btn" title="Delete button">×</button>
             `;
+            div.querySelectorAll("input").forEach((input) => {
+                input.addEventListener("input", updatePreview);
+            });
+
+            // Add drag event listeners
+            div.addEventListener("dragstart", handleDragStart);
+            div.addEventListener("dragover", handleDragOver);
+            div.addEventListener("drop", handleDrop);
+            div.addEventListener("dragend", handleDragEnd);
+
+            // Add delete button listener
+            div.querySelector(".delete-btn").addEventListener("click", () => {
+                div.remove();
+                updatePreview();
+            });
+
             return div;
         }
+
+        let draggedItem = null;
+
+      function handleDragStart(e) {
+        draggedItem = this;
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/html", this.innerHTML);
+        this.classList.add("dragging");
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        const boundingRect = this.getBoundingClientRect();
+        const offset = boundingRect.y + boundingRect.height / 2;
+        if (e.clientY < offset) {
+          this.parentNode.insertBefore(draggedItem, this);
+        } else {
+          this.parentNode.insertBefore(draggedItem, this.nextSibling);
+        }
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        return false;
+      }
+
+      function handleDragEnd() {
+        this.classList.remove("dragging");
+        updatePreview();
+      }
 
         htmlFileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    currentHTML = e.target.result;
-                    
-                    // Parse the loaded HTML
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(currentHTML, 'text/html');
-
-                    // Clear existing containers
-                    imageContainer.innerHTML = '';
-                    buttonContainer.innerHTML = '';
-
-                    // Count and generate image input fields
-                    const imageSlides = doc.querySelectorAll('.swiper-slide');
-                    const imageCount = Math.max(imageSlides.length, 1);
-
-                    for (let i = 1; i <= imageCount; i++) {
-                        const div = createImageInputs(i);
-                        imageContainer.appendChild(div);
-                    }
-
-                    // Count and generate button input fields
-                    const linkButtons = doc.querySelectorAll('.link-button');
-                    const buttonCount = Math.max(linkButtons.length, 1);
-
-                    for (let i = 1; i <= buttonCount; i++) {
-                        const div = createButtonInputs(i);
-                        buttonContainer.appendChild(div);
-                    }
-
-                    // Load the content into the editor
-                    loadHTMLIntoEditor(currentHTML);
+                    processAndLoadHtmlContent(e.target.result);
                 };
                 reader.readAsText(file);
             }
@@ -317,15 +467,22 @@
             document.getElementById('instagram-link-input').value = socialLinks.instagram ? socialLinks.instagram.href : '';
 
             // Update buttons
-            const buttons = doc.querySelectorAll('.link-button');
+            const buttonWrapper = doc.getElementById("link-button-wrapper");
+            const buttons = buttonWrapper ? buttonWrapper.querySelectorAll(".link-button") : []; // Find buttons inside the wrapper
+
+            // Clear existing button inputs in the editor
+            buttonContainer.innerHTML = "";
+
+            // Create editor inputs based on template buttons
             buttons.forEach((button, index) => {
-                const buttonGroup = buttonContainer.querySelectorAll('.button-group')[index];
-                if (buttonGroup) {
-                    const buttonTextInput = buttonGroup.querySelector('.button-text');
-                    const buttonLinkInput = buttonGroup.querySelector('.button-link');
-                    if (buttonTextInput) buttonTextInput.value = button.textContent.trim();
-                    if (buttonLinkInput) buttonLinkInput.value = button.href;
-                }
+                const div = createButtonInputs(index + 1);
+                const buttonTextInput = div.querySelector(".button-text");
+                const buttonLinkInput = div.querySelector(".button-link");
+                if (buttonTextInput)
+                    buttonTextInput.value = button.textContent.trim();
+                if (buttonLinkInput)
+                    buttonLinkInput.value = button.href;
+                buttonContainer.appendChild(div);
             });
 
             updatePreview();
@@ -360,13 +517,16 @@
                 
                 // Add all current images
                 const imageInputs = imageContainer.querySelectorAll('.image-upload-container');
-                imageInputs.forEach((container, index) => {
-                    const urlInput = container.querySelector(`#image${index + 1}-input`);
-                    const altInput = container.querySelector(`#image${index + 1}-alt-input`);
-                    
-                    const slide = document.createElement('div');
-                    slide.className = 'swiper-slide';
-                    slide.innerHTML = `<img src="${urlInput.value || ''}" alt="${altInput.value || `Campaign Image ${index + 1}`}" loading="lazy">`;
+                imageInputs.forEach((container) => {
+                    // Find inputs within each container
+                    const inputs = container.querySelectorAll("input[type='text']");
+                    const urlInput = inputs[0];
+                    const altInput = inputs[1];
+
+                    const slide = document.createElement("div");
+                    slide.className = "swiper-slide";
+                    slide.innerHTML = `<img src="${urlInput.value || ""}" 
+                                        alt="${altInput.value || `Campaign Image`}" loading="lazy">`;
                     swiperWrapper.appendChild(slide);
                 });
             }
@@ -389,27 +549,45 @@
             if (socialLinks.instagram) socialLinks.instagram.href = document.getElementById('instagram-link-input').value;
 
             // Update Buttons
-            const buttonsContainer = doc.querySelector('.link-button').parentNode;
-            if (buttonsContainer) {
-                // Remove existing buttons
-                doc.querySelectorAll('.link-button').forEach(btn => btn.remove());
-                
-                // Add all current buttons
-                const buttonGroups = buttonContainer.querySelectorAll('.button-group');
-                buttonGroups.forEach(group => {
-                    const textInput = group.querySelector('.button-text');
-                    const linkInput = group.querySelector('.button-link');
-                    
-                    if (textInput && linkInput) {
-                        const button = document.createElement('a');
-                        button.className = 'link-button';
-                        button.target = '_blank';
-                        button.rel = 'noopener noreferrer';
-                        button.href = linkInput.value || '#';
-                        button.textContent = textInput.value || '';
-                        buttonsContainer.appendChild(button);
+            const buttonWrapper = doc.getElementById("link-button-wrapper");
+            if (buttonWrapper) {
+                buttonWrapper.innerHTML = "";
+
+                // Get button data from the editor's input fields
+                const buttonGroups = document
+                    .getElementById("button-groups-container").querySelectorAll(".button-group");
+
+                buttonGroups.forEach((group, index) => {
+                    const textInput = group.querySelector(".button-text");
+                    const linkInput = group.querySelector(".button-link");
+
+                    // Only add if text or link has a value
+                    if ( textInput && linkInput && (textInput.value.trim() || linkInput.value.trim()) ) {
+                        const button = document.createElement("a");
+                        button.className = "link-button";
+                        button.target = "_blank";
+                        button.rel = "noopener noreferrer";
+                        button.href = linkInput.value || "#";
+                        button.textContent = textInput.value || "";
+
+                        if (index > 0) {
+                            buttonWrapper.appendChild(document.createTextNode("\n  "));
+                        } else {
+                            buttonWrapper.appendChild(document.createTextNode("\n  "));
+                        }
+
+                        // Append the actual button
+                        buttonWrapper.appendChild(button);
                     }
                 });
+
+                // Formatting the .link-buttons into separate lines
+                if (buttonGroups.length > 0 && buttonWrapper.childNodes.length > 0) {
+                    buttonWrapper.appendChild(document.createTextNode("\n"));
+                }
+            }
+            else {
+                console.warn("Could not find #link-button-wrapper in the template. Buttons cannot be updated.");
             }
 
             previewFrame.srcdoc = doc.documentElement.outerHTML;
@@ -492,12 +670,18 @@
                 return;
             }
 
+            // Prepend doctype to the HTML content
+            const pageContent = `<!DOCTYPE html>\n${previewFrame.srcdoc}`;
+
             const blob = new Blob([previewFrame.srcdoc], { type: 'text/html' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'updated-campaign.html';
             link.click();
         });
+        
+        // Load index.html by default when the page loads
+        document.addEventListener('DOMContentLoaded', loadDefaultTemplate);
     </script>
 </body>
 </html>
