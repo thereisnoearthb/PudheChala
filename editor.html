@@ -673,7 +673,7 @@
             // Prepend doctype to the HTML content
             const pageContent = `<!DOCTYPE html>\n${previewFrame.srcdoc}`;
 
-            const blob = new Blob([previewFrame.srcdoc], { type: 'text/html' });
+            const blob = new Blob([pageContent], { type: 'text/html' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'updated-campaign.html';
