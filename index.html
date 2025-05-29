@@ -9,7 +9,7 @@
         content="Pudhe Chala, Move forward">
     <meta property="og:image"
         content="/pictures/a.webp">
-    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:type" content="image/webp">
     <meta property="keywords"
         content="Transportation, Mumbai, Public transportation, Bus, Pudhe Chala, MSRTC, Maharashtra State Road Transport Corporation">
     <meta property="og:type" content="website">
@@ -38,7 +38,7 @@
     <link rel="preload"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Open+Sans:wght@400;600&amp;display=swap"
         as="style">
-    <link rel="icon" href="https://thereisnoearthb.com/TINEB_LOGO.jpeg" type="image/x-icon">
+    <link rel="icon" href="https://thereisnoearthb.com/TINEB_LOGO.jpeg" type="image/jpeg">
 
     <!-- External Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -78,7 +78,6 @@
             box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Title Styles */
         .page-header {
             display: flex;
             flex-direction: column;
@@ -92,8 +91,15 @@
             box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
         }
 
+        /* Container for page titles */
+        .title-container {
+            width: 100%;
+            max-width: 314px;
+            padding-top: 80px;
+            margin-bottom: 20px;
+        }
+
         .page-title {
-            margin-top: 0.7em;
             font-family: 'Sulphur Point', sans-serif;
             font-style: normal;
             font-weight: 700;
@@ -101,8 +107,8 @@
             line-height: 1;
             color: #42367D;
             text-align: center;
-            /* padding-top to space out from the top of the page */
-            padding-top: 50px;
+            margin-top: 0.7em;
+            margin-bottom: 0.25em; /* Space between title and subtitle */
         }
 
         .page-subtitle {
@@ -111,13 +117,9 @@
             font-weight: 700;
             font-size: 1.2rem;
             line-height: 1;
-            display: flex;
-            align-items: center;
             text-align: center;
             letter-spacing: -0.01em;
             color: #42367D;
-            /* padding-bottom to space it from the Google Translate Element */
-            padding-bottom: 20px;
         }
 
         /* Card Styles */
@@ -345,15 +347,13 @@
 
         <!-- Social Buttons -->
         <div class="social-buttons">
-            <a  href=""
-                class="email-btn"
+            <a href="#"
                 target="_blank" rel="noopener noreferrer"
                 aria-label="Email Button">
                 <img src="assets/email-icon.svg" alt="Email icon" />
             </a>
             
-            <a  href=""
-                class="twitter-btn"
+            <a href="https://x.com/ThereIsNoEarthB"
                 target="_blank" rel="noopener noreferrer"
                 aria-label="X Button">
                 <img src="assets/x-icon.svg" alt="X icon" />
