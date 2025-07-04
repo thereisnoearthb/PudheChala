@@ -1,27 +1,318 @@
 <!DOCTYPE html>
-<html>
-
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-
-  <body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pudhe Chala: Email petition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+      body { background-color: white; color: black; padding-top: 1rem; padding-bottom: 1rem; }
+      .container { max-width: 800px; }
+      .btn-custom-primary { background-color: #2e4989; border-color: #2e4989; color: white; }
+      .btn-custom-primary:hover, .btn-custom-primary:focus { background-color: #1e3a75; border-color: #1e3a75; color: white; }
+      .btn-custom-secondary { background-color: #dfd3b9; border-color: #dfd3b9; color: black; }
+      .btn-custom-secondary:hover, .btn-custom-secondary:focus { background-color: #c9bfa5; border-color: #c9bfa5; color: black; }
+      .btn.disabled, .btn:disabled, fieldset:disabled .btn { pointer-events: none; opacity: 0.65; }
+      .email-preview { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; margin-top: 1rem; border-radius: 0.375rem; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 50vh; overflow-y: auto; }
+      h5, h6 { color: #2e4989; }
+      #email-details p { margin-bottom: 0.5rem; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <h5 class="mb-3 text-center">Email Preview & Actions</h5>
+      <p class="text-center text-muted small">Hover over "Send Mail" to see the link. If your email app doesn't open correctly, please use the copy button.</p>
+      <div class="text-center mb-4">
+        <a id="send" href="#" target="_blank" class="btn btn-custom-primary btn-lg me-2 disabled" role="button" title="Generating link...">
+          <i class="bi bi-send"></i> Send Mail
+        </a>
+        <button id="copy" class="btn btn-custom-secondary me-2" type="button">
+          <i class="bi bi-clipboard"></i> Copy Email Content
+        </button>
+      </div>
+      <h6>Email Details:</h6>
+      <div id="email-details" class="mb-3">
+        <p><strong>To:</strong> <span id="preview-to">(Generating...)</span></p>
+        <p id="cc-line" style="display: none;"><strong>Cc:</strong> <span id="preview-cc"></span></p>
+        <p id="bcc-line" style="display: none;"><strong>Bcc:</strong> <span id="preview-bcc"></span></p>
+        <p><strong>Subject:</strong> <span id="preview-subject">(Generating...)</span></p>
+      </div>
+      <h6>Email Body Preview:</h6>
+      <div id="email-preview" class="email-preview">(Generating...)</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-      (() => {
-        const sites = [
-          'androidmail.html', 'iphonemail.html'
-        ];
+      // --- Embedded Mail Generation Script START ---
+      
+      const TO_ADDRESS = "transport@bestundertaking.com,office.mcmcr@mcgm.gov.in";
+      const CC_ADDRESS = "";
+      const BCC_ADDRESS = "solidarity@thereisnoearthb.com";
+      const SUBJECT_LINES = ["Request to increase and improve the condition of BEST buses in Mumbai"];
+      const PARA1_OPTIONS = ["To \n\nShri S.V.R. Srinivas IAS \nGeneral manager, BEST \n1 st Floor, BEST Bhavan, BEST Marg Colaba, Mumbai – 400 001\ntransport@bestundertaking.com \n\nAnd \nDr. Bhushan Gagrani, I.A.S.\nMunicipal Commissioner, BMC President\nBrihanmumbai Municipal Corporation, Head Quarter, Mahanagarpalika Marg, Mumbai 400001\noffice.mcmcr@mcgm.gov.in \n\nMost respectfully, \n\nMumbai is the most populous city in India, BEST handles a daily footfall of over 35 lakh passengers. However, a significant shortfall in the BEST fleet causes immense commuting stress for Mumbai. BEST services by slashing its fleet by 9% from 3,195 to 2,915 buses. We see a rapid decline in not just frequency of these buses but also the quality of its service to its people. Since public transport is the only means of affordable transportation for a large part of the population, this is a concerning trend. A survey of 1,000 people in Mumbai published in 2018, by AECOM, found a “majority” of people were “not satisfied with the reliability of public transportation”, and 75% found it “increasingly stressful to use”."];
+      const PARA2_OPTIONS = ["The people of Mumbai know and recognise the issues within the system and put forth these 2 broad demands: \n\nBEST taking complete ownership of the buses with systematic phasing out of privatisation and strengthen operational capacity \nBuild a System for All, Not Just the Able-Bodied or Digitally Fluent\n\nHere’s why we know, these demands are important and are in the best interest of the people of Mumbai: \n\nEfficiency \n\nMumbai, when it had a bus fleet of  3,284 buses, had 15 buses per 100,000 population, against the global norm of around 50-120 buses per 100,000 people, show data from the Brihanmumbai Electricity Supply and Transport Undertaking (BEST). That reality has changed dramatically in the last few years. \n\nMumbai’s bus transit system is in desperate need of Defibrillation. The inefficiency of the public bus system has increased in the past 10-15 years for the following reasons:\n\nWet lease system: The Brihanmumbai Electric Supply and Transport (BEST), currently operates its public transport on a wet-lease system, which makes public transport vulnerable to high involvement and changes from private players. In this model, private contractors provide buses and drivers while BEST manages routes and conductors, has proven to be a deeply flawed system that undermines service reliability, worker welfare, and the larger public interest. \nBreakdowns in service are frequent and directly impact commuters. Instances such as wet-lease operators suddenly pulling 280 buses off the roads due to financial issues have left commuters stranded, leading to severe delays and inconvenience. \nAccidents like the December 2024 Kurla incident, highlight serious training deficiencies within hired wet-lease drivers. Workers in the wet-lease system face low wages (Rs 15,000-19,000 per month), poor benefits, and a lack of job security. Everyone deserves a living wage without being exploited, especially when the work requires hard labour in extreme conditions that Mumbai is currently facing due to the extremely harsh conditions under climate change. Many commute long distances without a travel allowance and lack even the basic perk of free bus rides that permanent BEST employees enjoy. These injustices lead to frequent strikes and service disruptions, further harming the commuting public (1,2,3).\nBEST’s reliance on private contractors has led to financial irregularities, including unpaid dues and problematic land transactions. Prime depot land has been diverted for private development, with BEST struggling to recover Rs 300 crore from developers. Such mismanagement jeopardises the long-term financial health of the undertaking and limits its ability to expand and improve services. \nContract drivers also skip stops to fulfil quotas rather than prioritising commuter needs. Additionally, the growing trend of conductor-less buses forces passengers to wait in additional queues for tickets, leading to delays and missed buses. These operational inefficiencies degrade the overall quality of public transport in Mumbai (Konduskar, 2024).\n\n\nDisinvestment in public transport: Mumbai is disinvesting in public transport while pouring massive funds into roads and highways. In 2024–25, the BMC allocated nearly ₹60,000 crore to infrastructure—mostly to roads, bridges, and projects like the ₹21,500 crore Ring Road and ₹13,000 crore Coastal Road—at the cost of mangroves and flood safety. Despite India spending just 1.7% of its GDP on public transport (vs. China’s 5.5%), car-centric infrastructure continues to expand. Since 1999, over 60 flyovers have been built, yet the city has no dedicated bus lanes or proper pedestrian infrastructure. Meanwhile, private vehicle ownership has tripled and daily public transport ridership has dropped by 15% since 2009. This shift benefits real estate interests more than the public. Evidence shows that building more roads only worsens traffic in the long term (induced demand). Prioritising public transport is the only sustainable way to solve congestion and ensure equitable access. \n\n\nReduced Fleet: In 2019, BEST committed to maintaining a fleet of 3,333 buses under an MoU with the BMC. But due to budget shortfalls and lack of financial support, its own fleet has dropped to just 920—and is expected to shrink to 229 by 2026. To compensate, BEST added 1,935 wet-leased buses, yet the combined total still falls short. An RTI revealed that 2,160 buses were scrapped over five years, but only 37 were replaced. Mumbai, with a population of over 2.2 crore and daily ridership of 35 lakh, is being served by just 2,855 buses. That means each bus must carry over 1,200 people per day—an impossible burden on 50-seater buses. BEST has also cut routes with “low” ridership, further limiting access. A growing city like Mumbai needs more buses, not fewer—and a reliable, publicly owned fleet that prioritises frequency and reach.\nPrivatisation of the public transit system (even with a semi-autonomous model) has led to many failures that need to be accounted for when serving the public. \nB. Accessibility \nEfficient public transport is key to equitable urban development—but Mumbai’s bus system excludes the very people who need it most. While the city is highly diverse, its bus network remains inaccessible to the elderly, disabled, women, non-tech users, and non-Marathi speakers.\nDue to a reduced fleet and irregular service, apps like Chalo and BEST Pravas are no longer reliable, and most bus stops lack even basic information like route maps or directions. This disproportionately affects people without smartphones or digital literacy, especially older commuters and the disabled. Wheelchair access is nearly non-existent, and there are no accommodations for visually impaired or neurodivergent users. Over half of women surveyed by Greenpeace cited the lack of clean public toilets as a major barrier.\nOther systemic issues include: no public grievance redressal system, no annual BEST reports since 2019–20, and a lack of multilingual signage. Public accountability and infrastructure investment are urgently needed.\nC. Inclusivity: \nPublic transit is vital for equitable access to jobs, education, and welfare, but Mumbai's system fails its most vulnerable users—especially the urban poor, women, elderly, children, and people with disabilities.\nIn Mumbai, 61% of the urban poor walk, 14% use public transport, and 6% cycle (iTrans, 2011; Joshi, 2014). Nationally, 16% of workers walk an average of 8 km daily (TERI, 2018), often due to lack of transit access. These long, unsafe commutes worsen with climate extremes.\nElderly and children face disproportionate risk as pedestrians: in 2016, 5.8% of road fatalities were seniors (8,814 deaths), and 7% were children (MoRTH, 2016). People with disabilities are also excluded by inaccessible buses and infrastructure.\nWomen, who make multiple short trips daily, face unsafe and unreliable transport. While they are more likely to rely on buses, 22% of low-income women still find fares unaffordable (Greenpeace, 2023). Poor mobility access directly contributes to India’s declining female labour force, especially in cities like Mumbai (Luis A. Andre et al., 2017; ITDP & Safetipin, 2017)."];
+      const PARA3_OPTIONS = ["Our demands as concerned citizens: \nBEST taking complete ownership of the buses with systematic phasing out of privatisation and strengthen operational capacity \nImmediately overturn the hike in bus fares that has been implemented in 2025. \nState-allocated budget and robust financial support for BEST. BEST must also ensure that revenue generated from public transport remains within the system, allowing reinvestment in new buses, infrastructure, and service improvements rather than being siphoned off by private operators.\nIncrease the fleet of BEST owned buses and adhere to MOU of 2019 \nSystematically phase out wet-lease buses: Public transit is an essential service that must prioritize citizens over corporate interests. It will also improve worker welfare and stability - ultimately increasing efficiency, safety and reliability for people and job security and satisfaction for people working in the transit system.  \nProtecting Public Assets and Expanding Infrastructure: Instead of leasing out prime depot lands to private developers, BEST should use these spaces for expanding its own bus fleet and infrastructure. \nPublish BEST Annual Reports every year with details of fleet strength, spending, and accessibility improvements.\n\n\n2. Build a System for All, Not Just the Able-Bodied or Digitally Fluent\nInstall clear, colour-coded route maps at every bus stop, showing only the buses that stop there.\nEnsure all route maps include directional clarity (UP/DOWN) and are available in braille.\nDisplay bus stop names and numbers in English, Marathi, and Hindi in large, legible fonts. \nProvide full-length benches with shade and charging ports at all bus stops for safe and comfortable waiting.\nBuild and maintain clean, accessible public toilets near all high-footfall bus stops, especially for women.\nEquip all new buses with wheelchair ramps and ensure space for safe wheelchair seating.\nTrain staff to assist elderly and disabled passengers with empathy and care.\nCreate a grievance redressal helpline with a dedicated department to handle commuter complaints transparently.\nIncrease the frequency of the Ladies Special Buses - Tejaswini Buses - in Mumbai to ensure safety. \nMake Ladies Special Buses free for women and transgender persons. \nIntroduce fare subsidies for women, students, the elderly, and persons with disabilities in BEST buses.\n\nWe are hopeful that you will listen to and consider our demands and anticipate a positive response."];
+      const SIGNING_OFF_OPTIONS = ["Yours Sincerely,","In Solidarity,","With hope for justice,","Regards,"];
 
-        const iOS =
-          /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-          !window.MSStream;
+      // --- Use actual newline characters internally for JS logic ---
+      const LINE_BREAK = "\n";
+      const DOUBLE_LINE_BREAK = "\n\n";
+    
+      
+      let mailtoLink = "";
+      let copyText = ""; // Body only for preview/copy
+      let selectedSubject = "";
 
-        if (iOS)
-          location.href = sites[1];
-        else
-          location.href = sites[0];
-      })();
+      function getRandomElement(arr) {
+        // Ensure arr is an array and not empty before accessing length
+        if (!Array.isArray(arr) || arr.length === 0) return "";
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function escapeHtmlForDisplay(unsafe) {
+        if (typeof unsafe !== "string") return "";
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function prepareMail() {
+        const sendLink = document.getElementById("send");
+
+        try {
+          selectedSubject = getRandomElement(SUBJECT_LINES);
+          const selectedPara1 = getRandomElement(PARA1_OPTIONS);
+          const selectedPara2 = getRandomElement(PARA2_OPTIONS);
+          const selectedPara3 = getRandomElement(PARA3_OPTIONS);
+          const selectedSignoff = getRandomElement(SIGNING_OFF_OPTIONS);
+
+          // --- Construct body using actual newlines ---
+          const bodyForMailto = [
+            selectedPara1,
+            selectedPara2,
+            selectedPara3,
+            selectedSignoff,
+          ].filter(p => typeof p === 'string' && p.length > 0) // Filter out potential empty strings/undefined
+           .join(DOUBLE_LINE_BREAK); // Join paragraphs with internal newlines
+
+          // --- Construct mailto link (URLSearchParams will encode \n correctly) ---
+          const params = new URLSearchParams();
+          // Only add params if they have a value
+          if (CC_ADDRESS) params.append("cc", CC_ADDRESS);
+          if (BCC_ADDRESS) params.append("bcc", BCC_ADDRESS);
+          if (selectedSubject) params.append("subject", selectedSubject);
+          if (bodyForMailto) params.append("body", bodyForMailto); // Let URLSearchParams handle encoding 
+
+
+          // Platform Specific Adjustments (Example for iOS if needed later)
+          let finalQueryString = params.toString();
+          finalQueryString = finalQueryString.replace(/\+/g, '%20');
+
+          // Platform Detection
+					const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+					const platformNavigator = navigator.platform || ""; // For OS-level platform string
+
+					let detectedSystem = "Unknown";
+					let mailtoEncodingProfile = "standard"; // Profile to decide encoding: 'ios_specific' or 'standard'
+
+					// iOS Detection Logic
+					// 1. Check navigator.platform for direct iOS device strings (most reliable if available)
+					if (/iPad|iPhone|iPod/.test(platformNavigator)) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 2. Check userAgent for standard iOS device strings
+					else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) { // !window.MSStream helps avoid some Windows Phone false positives
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 3. Check for "Macintosh" + "Mobile" in userAgent (common for iPads in desktop mode/emulators)
+					else if (/Macintosh/.test(userAgent) && /Mobile/.test(userAgent)) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 4. Check for "Macintosh" userAgent with multi-touch capability (another iPad desktop mode/emulator indicator)
+					else if (/Macintosh/.test(userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// macOS Detection (ensure it's not an iPad already identified above)
+					else if ((/Macintosh/.test(userAgent) || /MacIntel/.test(platformNavigator) || /MacPPC/.test(platformNavigator) || /Mac68K/.test(platformNavigator))) {
+						detectedSystem = "macOS";
+						mailtoEncodingProfile = "standard";
+					}
+					// Android Detection
+					else if (/android/i.test(userAgent)) {
+						detectedSystem = "Android";
+						mailtoEncodingProfile = "standard"; // Android is generally robust
+					}
+					// Windows Detection
+					else if (/Win/.test(platformNavigator)) {
+						detectedSystem = "Windows";
+						mailtoEncodingProfile = "standard";
+					}
+					// Linux Desktop Detection
+					else if (/Linux/.test(platformNavigator) && !/android/i.test(userAgent)) { // Exclude Android's Linux
+						detectedSystem = "Linux";
+						mailtoEncodingProfile = "standard";
+					}
+					// If still "Unknown", it might be a less common OS. 'standard' is a safe default.
+					console.log("Detected System:", detectedSystem);
+					console.log("Using mailto encoding profile:", mailtoEncodingProfile);
+
+					// Apply encoding adjustments based on the profile
+					if (mailtoEncodingProfile === "ios_specific") {
+						console.log("Applying iOS specific mailto link generation strategy.");
+						finalQueryString = finalQueryString.replace(/%0A/g, '%0D%0A');
+						console.log("iOS: Converted newlines from %0A to %0D%0A for better compatibility.");
+					}
+					
+					else if (mailtoEncodingProfile === "standard") {
+						console.log("Applying standard mailto link generation strategy for ", detectedSystem);
+					}
+					// finalQueryString is now potentially adjusted based on the platform.
+
+					if(mailtoLink.length>1998)
+						console.warn("mailto too long for Chrome: " + mailtoLink.length +" chars");
+					else
+						console.log("mailto length OK: "+ mailtoLink.length +" chars");
+
+          if (TO_ADDRESS) {
+             // Encode TO addresses individually, then join
+             const encodedTo = TO_ADDRESS.split(",")
+              .map(e => e.trim()) // Trim whitespace first
+              .filter(e => e)     // Remove empty entries
+              .map(e => encodeURIComponent(e)) // Then encode
+              .join(",");
+
+             if (encodedTo) { // Ensure there's at least one valid TO address after filtering/encoding
+                mailtoLink = `mailto:${encodedTo}?${finalQueryString}`;
+             } else {
+                mailtoLink = ""; // No valid TO address
+                console.error("No valid TO addresses provided after encoding.");
+             }
+
+          } else {
+            mailtoLink = "";
+            console.error("TO address constant is missing or empty.");
+          }
+
+          // --- Construct body text for preview/copy (plain text) ---
+          copyText = [
+              selectedPara1,
+              selectedPara2,
+              selectedPara3,
+              selectedSignoff
+          ].filter(p => typeof p === 'string' && p.length > 0)
+           .join('\n\n');
+
+          // --- Update preview elements safely ---
+          const toElem = document.getElementById("preview-to");
+          const ccElem = document.getElementById("preview-cc");
+          const ccLine = document.getElementById("cc-line");
+          const bccElem = document.getElementById("preview-bcc");
+          const bccLine = document.getElementById("bcc-line");
+          const subjectElem = document.getElementById("preview-subject");
+          const previewElem = document.getElementById("email-preview");
+
+          if (toElem) toElem.textContent = escapeHtmlForDisplay(TO_ADDRESS || '(Not specified)');
+          if (ccElem && ccLine) {
+              if (CC_ADDRESS) {
+                  ccElem.textContent = escapeHtmlForDisplay(CC_ADDRESS);
+                  ccLine.style.display = 'block';
+              } else {
+                  ccLine.style.display = 'none';
+              }
+          }
+          if (bccElem && bccLine) {
+              if (BCC_ADDRESS) {
+                  bccElem.textContent = escapeHtmlForDisplay(BCC_ADDRESS);
+                  bccLine.style.display = 'block';
+              } else {
+                  bccLine.style.display = 'none';
+              }
+          }
+          // Display generated subject or placeholder
+          if (subjectElem) subjectElem.textContent = escapeHtmlForDisplay(selectedSubject || '(No subject generated)');
+          // Display generated body or placeholder
+          if (previewElem) previewElem.textContent = copyText || '(No body content generated)';
+
+
+          // --- Update the href of the anchor tag ---
+          if (sendLink) {
+            if (mailtoLink) {
+              sendLink.href = mailtoLink;
+              sendLink.classList.remove("disabled");
+              sendLink.title = "Click to open in your default email client";
+            } else {
+              sendLink.href = "#"; // Prevent navigation
+              sendLink.classList.add("disabled"); // Visually disable
+              sendLink.title = "Cannot generate email link (check TO address and console errors)";
+            }
+          }
+        } catch (err) {
+          console.error("Error in prepareMail:", err);
+          alert("An error occurred while preparing the email preview. Check console for details.");
+          if (sendLink) {
+            sendLink.href = "#";
+            sendLink.classList.add("disabled");
+            sendLink.title = "Error generating email link";
+          }
+        }
+      }
+
+      // --- Event Listeners within generated file ---
+      document.addEventListener("DOMContentLoaded", () => {
+        const copyButton = document.getElementById("copy");
+
+        if (copyButton) {
+          copyButton.addEventListener("click", () => {
+            // Ensure content exists before trying to copy
+            if (!copyText && !selectedSubject) {
+              alert("Email content not generated yet. Please reload or check generator inputs.");
+              return;
+            }
+            // Construct the full text including headers for copying
+            const fullEmailText = `To: ${TO_ADDRESS || ''}\n${
+              CC_ADDRESS ? `Cc: ${CC_ADDRESS}\n` : ""
+            }${
+              BCC_ADDRESS ? `Bcc: ${BCC_ADDRESS}\n` : ""
+            }Subject: ${selectedSubject || ''}\n\n${copyText || ''}`;
+
+            navigator.clipboard.writeText(fullEmailText)
+              .then(() => {
+                alert("Email content copied to clipboard!");
+              })
+              .catch(err => {
+                console.warn("Clipboard API failed, trying fallback:", err);
+                // Fallback using temporary textarea
+                const textarea = document.createElement("textarea");
+                textarea.value = fullEmailText;
+                textarea.style.position = "fixed"; // Prevent scrolling issues
+                textarea.style.opacity = "0"; // Hide it visually
+                textarea.style.left = "-9999px"; // Move off-screen
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                  document.execCommand("copy");
+                  alert("Email content copied (fallback)!");
+                } catch (errFallback) {
+                  console.error("Fallback copy failed:", errFallback);
+                  alert("Failed to copy automatically. Please copy manually from the preview.");
+                }
+                document.body.removeChild(textarea);
+              });
+          });
+        }
+
+        // Initial preparation on load
+        prepareMail();
+      });
+    
+      // --- Embedded Mail Generation Script END ---
     </script>
-  </body>
-
+</body>
 </html>
