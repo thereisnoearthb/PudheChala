@@ -312,6 +312,12 @@
 
         // Initial preparation on load
         prepareMail();
+
+        // Automatically redirect to a mail app
+        const sendLink = document.getElementById("send");
+        if (sendLink && !sendLink.classList.contains("disabled")) {
+          window.location.href = sendLink.href;
+        }
       });
     
       // --- Embedded Mail Generation Script END ---
