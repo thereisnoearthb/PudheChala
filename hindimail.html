@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pudhe Chala: Email petition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+      body { background-color: white; color: black; padding-top: 1rem; padding-bottom: 1rem; }
+      .container { max-width: 800px; }
+      .btn-custom-primary { background-color: #2e4989; border-color: #2e4989; color: white; }
+      .btn-custom-primary:hover, .btn-custom-primary:focus { background-color: #1e3a75; border-color: #1e3a75; color: white; }
+      .btn-custom-secondary { background-color: #dfd3b9; border-color: #dfd3b9; color: black; }
+      .btn-custom-secondary:hover, .btn-custom-secondary:focus { background-color: #c9bfa5; border-color: #c9bfa5; color: black; }
+      .btn.disabled, .btn:disabled, fieldset:disabled .btn { pointer-events: none; opacity: 0.65; }
+      .email-preview { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; margin-top: 1rem; border-radius: 0.375rem; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 50vh; overflow-y: auto; }
+      h5, h6 { color: #2e4989; }
+      #email-details p { margin-bottom: 0.5rem; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <h5 class="mb-3 text-center">Email Preview & Actions</h5>
+      <p class="text-center text-muted small">Clicking on 'Send Mail' will open your email app.
+        <br>
+         If your email app doesn't open correctly, please use the copy button.</p>
+      <div class="text-center mb-4">
+        <a id="send" href="#" target="_blank" class="btn btn-custom-primary btn-lg me-2 disabled" role="button" title="Generating link...">
+          <i class="bi bi-send"></i> Send Mail
+        </a>
+        <button id="copy" class="btn btn-custom-secondary me-2" type="button">
+          <i class="bi bi-clipboard"></i> Copy Email Content
+        </button>
+      </div>
+      <h6>Email Details:</h6>
+      <div id="email-details" class="mb-3">
+        <p><strong>To:</strong> <span id="preview-to">(Generating...)</span></p>
+        <p id="cc-line" style="display: none;"><strong>Cc:</strong> <span id="preview-cc"></span></p>
+        <p id="bcc-line" style="display: none;"><strong>Bcc:</strong> <span id="preview-bcc"></span></p>
+        <p><strong>Subject:</strong> <span id="preview-subject">(Generating...)</span></p>
+      </div>
+      <h6>Email Body Preview:</h6>
+      <div id="email-preview" class="email-preview">(Generating...)</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      // --- Embedded Mail Generation Script START ---
+      
+      const TO_ADDRESS = "transport@bestundertaking.com,office.mcmcr@mcgm.gov.in";
+      const CC_ADDRESS = "";
+      const BCC_ADDRESS = "solidarity@thereisnoearthb.com";
+      const SUBJECT_LINES = ["मुंबई में बेस्ट बसों की स्थिति में सुधार और वृद्धि का अनुरोध"];
+      const PARA1_OPTIONS = ["अत्यंत आदरपूर्वक,\n\nमुंबई भारत का सबसे अधिक आबादी वाला शहर है और बेस्ट प्रतिदिन 35 लाख से ज़्यादा यात्रियों को संभालता है। हालाँकि, बेस्ट के बेड़े में भारी कमी के कारण मुंबई में आवागमन का अत्यधिक तनाव। बेस्ट सेवाओं को अपने बेड़े में कटौती करके 9% की वृद्धि के साथ 3,195 से 2,915 बसें हम न केवल इन बसों की आवृत्ति में तेजी से गिरावट देख रहे हैं, बल्कि लोगों को दी जाने वाली सेवा की गुणवत्ता में भी गिरावट देख रहे हैं।चूंकि सार्वजनिक परिवहन ही आबादी के एक बड़े हिस्से के लिए किफायती परिवहन का एकमात्र साधन है, इसलिए यह एक चिंताजनक प्रवृत्ति है।ए सर्वे एईसीओएम द्वारा 2018 में प्रकाशित मुंबई में 1,000 लोगों पर किए गए एक सर्वेक्षण में पाया गया कि “अधिकांश” लोग “सार्वजनिक परिवहन की विश्वसनीयता से संतुष्ट नहीं थे”, और 75% ने पाया कि इसका “उपयोग करना तनावपूर्ण होता जा रहा है।”"];
+      const PARA2_OPTIONS = ["मुंबई के लोग व्यवस्था के भीतर की समस्याओं को जानते और पहचानते हैं और ये दो व्यापक मांगें रखते हैं:\n\nबेस्ट निजीकरण को व्यवस्थित तरीके से समाप्त करने के साथ बसों का पूर्ण स्वामित्व ले रहा है।परिचालन क्षमता को मजबूत करना\nसभी के लिए एक प्रणाली बनाएं, न कि केवल सक्षम या डिजिटल रूप से कुशल लोगों के लिए\n\nहम जानते हैं कि ये मांगें महत्वपूर्ण हैं और मुंबई के लोगों के सर्वोत्तम हित में हैं:\n\nA. क्षमता \n\nमुंबई में जब 3,284 बसों का बेड़ा था, तब प्रति 100,000 जनसंख्या पर 15 बसें थीं, जबकि वैश्विक मानक लगभग 100,000 जनसंख्या पर 15 बसें थीं। प्रति 100,000 पर 50-120 बसें बृहन्मुंबई विद्युत आपूर्ति एवं परिवहन उपक्रम (बेस्ट) के आंकड़े बताते हैं कि लोगों की संख्या में भारी गिरावट आई है। पिछले कुछ वर्षों में यह हकीकत नाटकीय रूप से बदल गई है।\n\nमुंबई की बस परिवहन प्रणाली को डिफिब्रिलेशन की सख्त जरूरत है।। पिछले 10-15 वर्षों में निम्नलिखित कारणों से सार्वजनिक बस प्रणाली की अकुशलता बढ़ी है:\n\nवेट लीज़ प्रणाली:बृहन्मुंबई विद्युत आपूर्ति एवं परिवहन (बेस्ट), वर्तमान में अपने सार्वजनिक परिवहन को वेट-लीज़ प्रणाली पर संचालित करता है, जिससे सार्वजनिक परिवहन निजी कंपनियों की अत्यधिक भागीदारी और बदलावों के प्रति संवेदनशील हो जाता है। इस मॉडल में, निजी ठेकेदार बसें और ड्राइवर उपलब्ध कराते हैं जबकि बेस्ट मार्गों और कंडक्टरों का प्रबंधन करता है। एक गंभीर रूप से दोषपूर्ण प्रणाली साबित हुई जो सेवा विश्वसनीयता, श्रमिक कल्याण और व्यापक सार्वजनिक हित को कमजोर करता है।\nसेवा में रुकावटें अक्सर आती रहती हैं और इसका सीधा असर यात्रियों पर पड़ता है। वेट-लीज़ संचालकों जैसे उदाहरण अचानक 280 बसें खींच ली गईं वित्तीय समस्याओं के कारण सड़कों से गायब होने के कारण यात्री फंस गए हैं, जिससे गंभीर देरी और असुविधा हो रही है।\nदिसंबर जैसी दुर्घटनाएँ 2024 कुर्ला यह घटना, नियोजित वेट-लीज़ ड्राइवरों में प्रशिक्षण की गंभीर कमियों को उजागर करती है। वेट-लीज़ प्रणाली में काम करने वालों को कम वेतन (15,000-19,000 रुपये प्रति माह), खराब लाभ और नौकरी की सुरक्षा की कमी का सामना करना पड़ता है। हर किसी को बिना किसी शोषण के जीविका कमाने लायक वेतन मिलना चाहिए, खासकर जब काम के लिए मुंबई जैसी चरम परिस्थितियों में कड़ी मेहनत करनी पड़े। अत्यंत कठोर परिस्थितियों के कारण सामना करना पड़ रहा है जलवायु परिवर्तन के कारण कई लोग यात्रा करते हैं। बिना यात्रा भत्ते के लंबी दूरी और उन्हें स्थायी बेस्ट कर्मचारियों को मिलने वाली मुफ़्त बस यात्रा जैसी बुनियादी सुविधा भी नहीं मिलती। इन अन्यायों के कारण बार-बार हड़तालें होती हैं और सेवाएँ बाधित होती हैं, जिससे आवागमन करने वाले लोगों को और नुकसान होता है।1,2,3).\nबेस्ट की निजी ठेकेदारों पर निर्भरता इसके कारण वित्तीय अनियमितताएँ हुई हैं, जिनमें बकाया राशि का भुगतान न करना और भूमि लेनदेन में समस्याएँ शामिल हैं। प्राइम डिपो की ज़मीन निजी विकास के लिए दे दी गई है, और बेस्ट को डेवलपर्स से 300 करोड़ रुपये वसूलने में भी मुश्किल हो रही है। इस तरह का कुप्रबंधन इस उपक्रम की दीर्घकालिक वित्तीय सेहत को खतरे में डालता है और सेवाओं के विस्तार और सुधार की इसकी क्षमता को सीमित करता है।\nठेका चालक भी यात्रियों की ज़रूरतों को प्राथमिकता देने के बजाय कोटा पूरा करने के लिए स्टॉप छोड़ देते हैं। इसके अलावा, कंडक्टर-रहित बसों का बढ़ता चलन यात्रियों को टिकट के लिए अतिरिक्त कतारों में इंतज़ार करने पर मजबूर करता है, जिससे देरी होती है और बसें छूट जाती हैं। ये परिचालन अक्षमताएँ मुंबई में सार्वजनिक परिवहन की समग्र गुणवत्ता को कम करती हैं (कोंडुस्कर, 2024).\n\n\nसार्वजनिक परिवहन में विनिवेश: मुंबई सार्वजनिक परिवहन में निवेश कम कर रही है और सड़कों और राजमार्गों में भारी निवेश कर रही है। 2024-25 में,बीएमसी ने बुनियादी ढांचे के लिए लगभग ₹60,000 करोड़ आवंटित किए—मुख्यतः सड़कों, पुलों और ₹21,500 करोड़ की रिंग रोड और ₹13,000 करोड़ की कोस्टल रोड जैसी परियोजनाओं पर — मैंग्रोव और बाढ़ सुरक्षा की कीमत पर। भारत द्वारा मात्र खर्च किए जाने के बावजूद इसके सकल घरेलू उत्पाद का 1.7% सार्वजनिक परिवहन (चीन के 5.5% की तुलना में) पर, कार-केंद्रित बुनियादी ढाँचे का विस्तार जारी है। 1999 से अब तक 60 से ज़्यादा फ्लाईओवर बनाए जा चुके हैं, फिर भी शहर में न तो कोई समर्पित बस लेन है और न ही पैदल यात्रियों के लिए उचित बुनियादी ढाँचा। इस बीच, निजी वाहनों का स्वामित्व तिगुना हो गया है और 2009 से सार्वजनिक परिवहन में दैनिक सवारियों की संख्या में 15% की गिरावट आई है। इस बदलाव का फ़ायदा आम जनता से ज़्यादा रियल एस्टेट क्षेत्र को होता है। प्रमाण बताते हैं कि ज़्यादा सड़कें बनाने से लंबी अवधि में यातायात की स्थिति और बिगड़ती है (मांग में वृद्धि)। सार्वजनिक परिवहन को प्राथमिकता देना ही भीड़भाड़ को कम करने और समान पहुँच सुनिश्चित करने का एकमात्र स्थायी तरीका है।\n\n\nकम किया गया बेड़ा: 2019 में, बेस्ट ने बीएमसी के साथ एक समझौता ज्ञापन के तहत 3,333 बसों का बेड़ा बनाए रखने की प्रतिबद्धता जताई थी। लेकिन बजट की कमी और वित्तीय सहायता के अभाव के कारण, इसका अपना बेड़ा घटकर सिर्फ 920 रह गया है और 2026 तक इसके घटकर 229 रह जाने की उम्मीद है। इसकी भरपाई के लिए, बेस्ट ने 1,935 वेट-लीज्ड बसें जोड़ीं, फिर भी संयुक्त कुल अभी भी कम है। एक आरटीआई से पता चला है कि पांच वर्षों में 2,160 बसें हटा दी गईं, लेकिन केवल 37 को बदला गया। 2.2 करोड़ से अधिक की आबादी और 35 लाख की दैनिक सवारियों वाली मुंबई को केवल 2,855 बसों द्वारा सेवा दी जा रही है। इसका मतलब है कि प्रत्येक बस को प्रतिदिन 1,200 से अधिक लोगों को ले जाना होगा\nसार्वजनिक परिवहन प्रणाली के निजीकरण (यहां तक कि अर्ध-स्वायत्त मॉडल के साथ भी) से कई विफलताएं सामने आई हैं, जिनका जनता को सेवा प्रदान करते समय ध्यान रखना आवश्यक है।\nB. सुलभता\nसमतामूलक शहरी विकास के लिए कुशल सार्वजनिक परिवहन ज़रूरी है—लेकिन मुंबई की बस व्यवस्था उन्हीं लोगों को वंचित रखती है जिन्हें इसकी सबसे ज़्यादा ज़रूरत है। हालाँकि शहर विविधताओं से भरा है, फिर भी इसका बस नेटवर्क बुज़ुर्गों, विकलांगों, महिलाओं, गैर-तकनीकी उपयोगकर्ताओं और गैर-मराठी भाषियों के लिए अभी भी दुर्गम है।\nकम बेड़े और अनियमित सेवा के कारण,चलो और बेस्ट प्रवास जैसे ऐप्स अब विश्वसनीय नहीं रहे, और ज़्यादातर बस स्टॉप पर रूट मैप या दिशा-निर्देश जैसी बुनियादी जानकारी भी नहीं होती। इसका सबसे ज़्यादा असर उन लोगों पर पड़ता है जिनके पास स्मार्टफ़ोन या डिजिटल साक्षरता नहीं है, खासकर बुज़ुर्ग यात्री और विकलांग।व्हीलचेयर की सुविधा लगभग न के बराबर है, तथा दृष्टिबाधित या तंत्रिकाविहीन उपयोगकर्ताओं के लिए कोई सुविधा नहीं है।ग्रीनपीस द्वारा सर्वेक्षण में शामिल आधी से अधिक महिलाएं उन्होंने स्वच्छ सार्वजनिक शौचालयों की कमी को एक बड़ी बाधा बताया।\nअन्य प्रणालीगत मुद्दों में शामिल हैं: कोई सार्वजनिक शिकायत निवारण प्रणाली नहीं, 2019-20 के बाद से कोई वार्षिक BEST रिपोर्ट नहीं, और बहुभाषीय संकेतों की कमी। सार्वजनिक जवाबदेही और बुनियादी ढाँचे में निवेश की तत्काल आवश्यकता है।\nC. समावेशिता:\nसार्वजनिक परिवहन नौकरियों, शिक्षा और कल्याण तक समान पहुंच के लिए महत्वपूर्ण है, लेकिन मुंबई की प्रणाली अपने सबसे कमजोर उपयोगकर्ताओं को विफल करती है - विशेष रूप से शहरी गरीब, महिलाएं, बुजुर्ग, बच्चे और विकलांग लोग.\nमुंबई में, 61% शहरी गरीब पैदल चलते हैं, 14% लोग सार्वजनिक परिवहन का उपयोग करते हैं और 6% लोग साइकिल चलाते हैं (आईट्रांस, 2011; जोशी, 2014)। राष्ट्रीय स्तर पर, 16% श्रमिक प्रतिदिन औसतन 8 किमी पैदल चलते हैं (टेरी, 2018), अक्सर परिवहन की सुविधा की कमी के कारण ऐसा होता है। ये लंबे, असुरक्षित सफ़र जलवायु परिवर्तन के साथ और भी बदतर हो जाते हैं।\nबुजुर्गों और बच्चों को असमानुपातिक जोखिम का सामना करना पड़ता है पैदल यात्री के रूप में: 2016 में, सड़क दुर्घटनाओं में मरने वाले 5.8% लोग वरिष्ठ नागरिक थे (8,814 मौतें), और 7% बच्चे थे (MoRTH, 2016)।अक्षमताओं वाले लोग इसके अलावा, दुर्गम बसें और बुनियादी ढांचा भी उन्हें वंचित रखता है।\nऔरत रोज़ाना कई छोटी-छोटी यात्राएँ करने वाले लोगों को असुरक्षित और अविश्वसनीय परिवहन का सामना करना पड़ता है। हालाँकि, वे बसों पर ज़्यादा निर्भर रहते हैं, 22% निम्न आय वाली महिलाएं अभी भी किराया अफोर्डेबल नहीं लगता (ग्रीनपीस, 2023)। खराब गतिशीलता पहुंच सीधे तौर पर भारत की घटती महिला श्रम शक्ति, विशेष रूप से मुंबई जैसे शहरों में (लुइस ए. आंद्रे एट अल., 2017; आईटीडीपी और सेफ्टीपिन, 2017)।\n\n\nचिंतित नागरिकों के रूप में हमारी मांगें:\nबेस्ट निजीकरण को व्यवस्थित रूप से समाप्त करने और परिचालन क्षमता को मजबूत करने के साथ बसों का पूर्ण स्वामित्व ले रहा है\n2025 में लागू की गई बस किराये में बढ़ोतरी को तुरंत वापस लिया जाए।\nबेस्ट के लिए राज्य द्वारा आवंटित बजट और मज़बूत वित्तीय सहायता। बेस्ट को यह भी सुनिश्चित करना होगा कि सार्वजनिक परिवहन से उत्पन्न राजस्व प्रणाली के भीतर ही रहे, जिससे निजी ऑपरेटरों द्वारा हड़पे जाने के बजाय नई बसों, बुनियादी ढाँचे और सेवा सुधारों में पुनर्निवेश संभव हो सके।\nबेस्ट के स्वामित्व वाली बसों के बेड़े में वृद्धि करें और 2019 के समझौता ज्ञापन का पालन करें\nवेट-लीज़ बसों को व्यवस्थित रूप से समाप्त करना:सार्वजनिक परिवहन एक आवश्यक सेवा है जिसमें कॉर्पोरेट हितों के बजाय नागरिकों को प्राथमिकता दी जानी चाहिए। इससे श्रमिकों का कल्याण और स्थिरता भी बढ़ेगी - अंततः लोगों की दक्षता, सुरक्षा और विश्वसनीयता बढ़ेगी और परिवहन प्रणाली में काम करने वाले लोगों की नौकरी की सुरक्षा और संतुष्टि बढ़ेगी। \nसार्वजनिक संपत्तियों की सुरक्षा और बुनियादी ढांचे का विस्तार:प्रमुख डिपो भूमि को निजी डेवलपर्स को पट्टे पर देने के बजाय, बेस्ट को इन स्थानों का उपयोग अपने बस बेड़े और बुनियादी ढांचे के विस्तार के लिए करना चाहिए।\nबेड़े की क्षमता, व्यय और सुगम्यता में सुधार के विवरण के साथ हर साल बेस्ट वार्षिक रिपोर्ट प्रकाशित करें।\n\n\n2. सभी के लिए एक प्रणाली बनाएं, न कि केवल सक्षम या डिजिटल रूप से कुशल लोगों के लिए\nप्रत्येक बस स्टॉप पर स्पष्ट, रंग-कोडित मार्ग मानचित्र लगाएं, जिसमें केवल वहां रुकने वाली बसें ही दिखाई जाएं।\nसुनिश्चित करें कि सभी मार्ग मानचित्रों में दिशात्मक स्पष्टता (ऊपर/नीचे) हो तथा वे ब्रेल लिपि में उपलब्ध हों।\nबस स्टॉप के नाम और नंबर अंग्रेजी, मराठी और हिंदी में बड़े, सुपाठ्य फ़ॉन्ट में प्रदर्शित करें।\nसुरक्षित और आरामदायक प्रतीक्षा के लिए सभी बस स्टॉप पर छाया और चार्जिंग पोर्ट के साथ पूरी लंबाई वाली बेंच उपलब्ध कराएं।\nसभी अधिक भीड़-भाड़ वाले बस स्टॉपों के पास, विशेष रूप से महिलाओं के लिए, स्वच्छ एवं सुलभ सार्वजनिक शौचालयों का निर्माण एवं रखरखाव करें।\nसभी नई बसों में व्हीलचेयर रैम्प की व्यवस्था की जाए तथा व्हीलचेयर के लिए सुरक्षित बैठने की जगह सुनिश्चित की जाए।\nबुजुर्ग और विकलांग यात्रियों को सहानुभूति और देखभाल के साथ सहायता करने के लिए कर्मचारियों को प्रशिक्षित करें।\nयात्रियों की शिकायतों को पारदर्शी तरीके से निपटाने के लिए एक समर्पित विभाग के साथ शिकायत निवारण हेल्पलाइन बनाएं।\nसुरक्षा सुनिश्चित करने के लिए मुंबई में महिला विशेष बसों - तेजस्विनी बसों - की आवृत्ति बढ़ाई जाए।\nमहिलाओं और ट्रांसजेंडर व्यक्तियों के लिए महिला विशेष बसें निःशुल्क बनाई जाएं।\nबेस्ट बसों में महिलाओं, छात्रों, बुजुर्गों और विकलांग व्यक्तियों के लिए किराया सब्सिडी शुरू की जाए।"];
+      const PARA3_OPTIONS = ["हमें आशा है कि आप हमारी मांगों को सुनेंगे और उन पर विचार करेंगे तथा सकारात्मक प्रतिक्रिया की आशा करते हैं।"];
+      const SIGNING_OFF_OPTIONS = ["भवदीय  चिंतित नागरिक"];
+
+      // --- Use actual newline characters internally for JS logic ---
+      const LINE_BREAK = "\n";
+      const DOUBLE_LINE_BREAK = "\n\n";
+    
+      
+      let mailtoLink = "";
+      let copyText = ""; // Body only for preview/copy
+      let selectedSubject = "";
+
+      function getRandomElement(arr) {
+        // Ensure arr is an array and not empty before accessing length
+        if (!Array.isArray(arr) || arr.length === 0) return "";
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function escapeHtmlForDisplay(unsafe) {
+        if (typeof unsafe !== "string") return "";
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function prepareMail() {
+        const sendLink = document.getElementById("send");
+
+        try {
+          selectedSubject = getRandomElement(SUBJECT_LINES);
+          const selectedPara1 = getRandomElement(PARA1_OPTIONS);
+          const selectedPara2 = getRandomElement(PARA2_OPTIONS);
+          const selectedPara3 = getRandomElement(PARA3_OPTIONS);
+          const selectedSignoff = getRandomElement(SIGNING_OFF_OPTIONS);
+
+          // --- Construct body using actual newlines ---
+          const bodyForMailto = [
+            selectedPara1,
+            selectedPara2,
+            selectedPara3,
+            selectedSignoff,
+          ].filter(p => typeof p === 'string' && p.length > 0) // Filter out potential empty strings/undefined
+           .join(DOUBLE_LINE_BREAK); // Join paragraphs with internal newlines
+
+          // --- Construct mailto link (URLSearchParams will encode \n correctly) ---
+          const params = new URLSearchParams();
+          // Only add params if they have a value
+          if (CC_ADDRESS) params.append("cc", CC_ADDRESS);
+          if (BCC_ADDRESS) params.append("bcc", BCC_ADDRESS);
+          if (selectedSubject) params.append("subject", selectedSubject);
+          if (bodyForMailto) params.append("body", bodyForMailto); // Let URLSearchParams handle encoding 
+
+
+          // Platform Specific Adjustments (Example for iOS if needed later)
+          let finalQueryString = params.toString();
+          finalQueryString = finalQueryString.replace(/\+/g, '%20');
+
+          // Platform Detection
+					const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+					const platformNavigator = navigator.platform || ""; // For OS-level platform string
+
+					let detectedSystem = "Unknown";
+					let mailtoEncodingProfile = "standard"; // Profile to decide encoding: 'ios_specific' or 'standard'
+
+					// iOS Detection Logic
+					// 1. Check navigator.platform for direct iOS device strings (most reliable if available)
+					if (/iPad|iPhone|iPod/.test(platformNavigator)) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 2. Check userAgent for standard iOS device strings
+					else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) { // !window.MSStream helps avoid some Windows Phone false positives
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 3. Check for "Macintosh" + "Mobile" in userAgent (common for iPads in desktop mode/emulators)
+					else if (/Macintosh/.test(userAgent) && /Mobile/.test(userAgent)) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// 4. Check for "Macintosh" userAgent with multi-touch capability (another iPad desktop mode/emulator indicator)
+					else if (/Macintosh/.test(userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
+						detectedSystem = "iOS";
+						mailtoEncodingProfile = "ios_specific";
+					}
+					// macOS Detection (ensure it's not an iPad already identified above)
+					else if ((/Macintosh/.test(userAgent) || /MacIntel/.test(platformNavigator) || /MacPPC/.test(platformNavigator) || /Mac68K/.test(platformNavigator))) {
+						detectedSystem = "macOS";
+						mailtoEncodingProfile = "standard";
+					}
+					// Android Detection
+					else if (/android/i.test(userAgent)) {
+						detectedSystem = "Android";
+						mailtoEncodingProfile = "standard"; // Android is generally robust
+					}
+					// Windows Detection
+					else if (/Win/.test(platformNavigator)) {
+						detectedSystem = "Windows";
+						mailtoEncodingProfile = "standard";
+					}
+					// Linux Desktop Detection
+					else if (/Linux/.test(platformNavigator) && !/android/i.test(userAgent)) { // Exclude Android's Linux
+						detectedSystem = "Linux";
+						mailtoEncodingProfile = "standard";
+					}
+					// If still "Unknown", it might be a less common OS. 'standard' is a safe default.
+					console.log("Detected System:", detectedSystem);
+					console.log("Using mailto encoding profile:", mailtoEncodingProfile);
+
+					// Apply encoding adjustments based on the profile
+					if (mailtoEncodingProfile === "ios_specific") {
+						console.log("Applying iOS specific mailto link generation strategy.");
+						finalQueryString = finalQueryString.replace(/%0A/g, '%0D%0A');
+						console.log("iOS: Converted newlines from %0A to %0D%0A for better compatibility.");
+					}
+					
+					else if (mailtoEncodingProfile === "standard") {
+						console.log("Applying standard mailto link generation strategy for ", detectedSystem);
+					}
+					// finalQueryString is now potentially adjusted based on the platform.
+
+					if(mailtoLink.length>1998)
+						console.warn("mailto too long for Chrome: " + mailtoLink.length +" chars");
+					else
+						console.log("mailto length OK: "+ mailtoLink.length +" chars");
+
+          if (TO_ADDRESS) {
+             // Encode TO addresses individually, then join
+             const encodedTo = TO_ADDRESS.split(",")
+              .map(e => e.trim()) // Trim whitespace first
+              .filter(e => e)     // Remove empty entries
+              .map(e => encodeURIComponent(e)) // Then encode
+              .join(",");
+
+             if (encodedTo) { // Ensure there's at least one valid TO address after filtering/encoding
+                mailtoLink = `mailto:${encodedTo}?${finalQueryString}`;
+             } else {
+                mailtoLink = ""; // No valid TO address
+                console.error("No valid TO addresses provided after encoding.");
+             }
+
+          } else {
+            mailtoLink = "";
+            console.error("TO address constant is missing or empty.");
+          }
+
+          // --- Construct body text for preview/copy (plain text) ---
+          copyText = [
+              selectedPara1,
+              selectedPara2,
+              selectedPara3,
+              selectedSignoff
+          ].filter(p => typeof p === 'string' && p.length > 0)
+           .join('\n\n');
+
+          // --- Update preview elements safely ---
+          const toElem = document.getElementById("preview-to");
+          const ccElem = document.getElementById("preview-cc");
+          const ccLine = document.getElementById("cc-line");
+          const bccElem = document.getElementById("preview-bcc");
+          const bccLine = document.getElementById("bcc-line");
+          const subjectElem = document.getElementById("preview-subject");
+          const previewElem = document.getElementById("email-preview");
+
+          if (toElem) toElem.textContent = escapeHtmlForDisplay(TO_ADDRESS || '(Not specified)');
+          if (ccElem && ccLine) {
+              if (CC_ADDRESS) {
+                  ccElem.textContent = escapeHtmlForDisplay(CC_ADDRESS);
+                  ccLine.style.display = 'block';
+              } else {
+                  ccLine.style.display = 'none';
+              }
+          }
+          if (bccElem && bccLine) {
+              if (BCC_ADDRESS) {
+                  bccElem.textContent = escapeHtmlForDisplay(BCC_ADDRESS);
+                  bccLine.style.display = 'block';
+              } else {
+                  bccLine.style.display = 'none';
+              }
+          }
+          // Display generated subject or placeholder
+          if (subjectElem) subjectElem.textContent = escapeHtmlForDisplay(selectedSubject || '(No subject generated)');
+          // Display generated body or placeholder
+          if (previewElem) previewElem.textContent = copyText || '(No body content generated)';
+
+
+          // --- Update the href of the anchor tag ---
+          if (sendLink) {
+            if (mailtoLink) {
+              sendLink.href = mailtoLink;
+              sendLink.classList.remove("disabled");
+              sendLink.title = "Click to open in your default email client";
+            } else {
+              sendLink.href = "#"; // Prevent navigation
+              sendLink.classList.add("disabled"); // Visually disable
+              sendLink.title = "Cannot generate email link (check TO address and console errors)";
+            }
+          }
+        } catch (err) {
+          console.error("Error in prepareMail:", err);
+          alert("An error occurred while preparing the email preview. Check console for details.");
+          if (sendLink) {
+            sendLink.href = "#";
+            sendLink.classList.add("disabled");
+            sendLink.title = "Error generating email link";
+          }
+        }
+      }
+
+      // --- Event Listeners within generated file ---
+      document.addEventListener("DOMContentLoaded", () => {
+        const copyButton = document.getElementById("copy");
+
+        if (copyButton) {
+          copyButton.addEventListener("click", () => {
+            // Ensure content exists before trying to copy
+            if (!copyText && !selectedSubject) {
+              alert("Email content not generated yet. Please reload or check generator inputs.");
+              return;
+            }
+            // Construct the full text including headers for copying
+            const fullEmailText = `To: ${TO_ADDRESS || ''}\n${
+              CC_ADDRESS ? `Cc: ${CC_ADDRESS}\n` : ""
+            }${
+              BCC_ADDRESS ? `Bcc: ${BCC_ADDRESS}\n` : ""
+            }Subject: ${selectedSubject || ''}\n\n${copyText || ''}`;
+
+            navigator.clipboard.writeText(fullEmailText)
+              .then(() => {
+                alert("Email content copied to clipboard!");
+              })
+              .catch(err => {
+                console.warn("Clipboard API failed, trying fallback:", err);
+                // Fallback using temporary textarea
+                const textarea = document.createElement("textarea");
+                textarea.value = fullEmailText;
+                textarea.style.position = "fixed"; // Prevent scrolling issues
+                textarea.style.opacity = "0"; // Hide it visually
+                textarea.style.left = "-9999px"; // Move off-screen
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                  document.execCommand("copy");
+                  alert("Email content copied (fallback)!");
+                } catch (errFallback) {
+                  console.error("Fallback copy failed:", errFallback);
+                  alert("Failed to copy automatically. Please copy manually from the preview.");
+                }
+                document.body.removeChild(textarea);
+              });
+          });
+        }
+
+        // Initial preparation on load
+        prepareMail();
+
+        // Automatically redirect to a mail app
+        const sendLink = document.getElementById("send");
+        if (sendLink && !sendLink.classList.contains("disabled")) {
+          window.location.href = sendLink.href;
+        }
+      });
+    
+      // --- Embedded Mail Generation Script END ---
+    </script>
+</body>
+</html>
