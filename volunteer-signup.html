@@ -86,7 +86,8 @@
         input[type="text"],
         input[type="email"],
         input[type="tel"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -152,24 +153,71 @@
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" required min="18">
+                </div>
+                <div class="form-group">
                     <label for="phone">Phone Number</label>
                     <input type="tel" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" id="age" name="age" required>
-                </div>
-                <div class="form-group">
-                    <label for="hours">Number of hours per week you can commit</label>
-                    <input type="number" id="hours" name="hours" required min="1">
+                    <label for="city">City</label>
+                    <select id="city" name="city" required>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bengaluru">Bengaluru</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Lucknow">Lucknow</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Kasganj">Kasganj</option>
+                        <option value="Vizag">Vizag</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Interests</label>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" name="interests" value="tech"> Tech</label>
-                        <label><input type="checkbox" name="interests" value="research"> Research</label>
-                        <label><input type="checkbox" name="interests" value="content-creation"> Content Creation</label>
+                        <label><input type="checkbox" name="interests" value="organizing-events"> Organizing events</label>
+                        <label><input type="checkbox" name="interests" value="participating-in-events"> Participating in events</label>
+                        <label><input type="checkbox" name="interests" value="research"> Research- campaigning/writing</label>
+                        <label><input type="checkbox" name="interests" value="content-creation"> Content creation- Creatives/Videos</label>
+                        <label><input type="checkbox" name="interests" value="tech"> Tech- Web development/Automation</label>
+                        <label><input type="checkbox" name="interests" value="other"> Other</label>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label>What language do you speak?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="language" value="english"> English</label>
+                        <label><input type="checkbox" name="language" value="marathi"> Marathi</label>
+                        <label><input type="checkbox" name="language" value="hindi"> Hindi</label>
+                        <label><input type="checkbox" name="language" value="other"> Other</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="referral">Who referred you to TINEB? (Optional)</label>
+                    <input type="text" id="referral" name="referral">
+                </div>
+                <div class="form-group">
+                    <label for="hours">How many hours can you devote per week?</label>
+                    <input type="number" id="hours" name="hours" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram handle (Optional)</label>
+                    <input type="text" id="instagram" name="instagram">
+                </div>
+                <div class="form-group">
+                    <label for="twitter">X (Formerly Twitter) handle (Optional)</label>
+                    <input type="text" id="twitter" name="twitter">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="community-guidelines" required>
+                        I agree with the <a href="https://docs.google.com/document/d/1kEdq0QSPuyv8gS5YZMM8Tq6ReBcqtGsmp00JrSXkc0s/edit?tab=t.0" target="_blank">community guidelines</a>.
+                    </label>
                 </div>
                 <button type="submit" class="submit-btn">Submit</button>
             </form>
