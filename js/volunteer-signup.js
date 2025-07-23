@@ -14,3 +14,8 @@ const guidelinesCheckbox = document.getElementById('community-guidelines');
 
 // Disable the submit button by default
 submitButton.disabled = true;
+
+// Add an event listener to the checkbox to enable/disable the submit button
+guidelinesCheckbox.addEventListener('change', () => {
+    submitButton.disabled = !guidelinesCheckbox.checked;
+});
