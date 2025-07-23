@@ -5,3 +5,12 @@ document.getElementById('volunteer-form').addEventListener('submit', (event) => 
         event.preventDefault();
     }
 });
+
+// Get the form, submit button, and message container elements
+const form = document.getElementById('volunteer-form');
+const submitButton = document.getElementById('submit-button');
+const messageContainer = document.getElementById('message-container');
+const guidelinesCheckbox = document.getElementById('community-guidelines');
+
+// Disable the submit button by default
+submitButton.disabled = true;
