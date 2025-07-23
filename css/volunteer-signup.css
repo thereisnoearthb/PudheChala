@@ -11,7 +11,12 @@ body {
 
 .container {
 	width: 100%;
-	max-width: 500px;
+	max-width: 400px;
+}
+
+#message-container {
+	width: 100%;
+	max-width: 400px;
 }
 
 .page-header {
