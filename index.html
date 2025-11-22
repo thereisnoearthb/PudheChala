@@ -161,12 +161,54 @@
             /* line-height: 1.6; */
         }
 
+        .act-now-wrapper{
+            width: 100%;
+        }
+
+        .act-now{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 10px 10px 0px;
+            gap: 23px;
+            width: 253px;
+            height: 44px;
+            background: #FFD900;
+            border-radius: 35px;
+            text-decoration: none;
+        }
+
+        .act-now > p{
+            font-family: 'DM Sans';
+            font-style: normal;
+            font-weight: 800;
+            font-size: 16px;
+            line-height: 21px;
+            color: #42367D;
+        }
+
         /* Social Button Styles */
         .social-buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
+            margin-top: 1rem;
             /* padding: 15px 0; */
+        }
+
+        .social-icon-wrapper{
+            width: 37.83px;
+            height: 37.83px;
+            background: #434343;
+            border-radius: 18.9141px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-icon-wrapper > a{
+            height: fit-content;
         }
 
         .social-icon:hover .social-button {
@@ -348,24 +390,31 @@
             </div>
         </div>
 
+        <div class="act-now-wrapper">
+            <a class="act-now" href="/mail.html" target="_blank" rel="noopener noreferrer" aria-label="Email Button">
+                <img src="assets/email-icon.svg" alt="Email icon" />
+                <p>Act Now!</p>
+            </a>
+        </div>
+
         <!-- Social Buttons -->
         <div class="social-buttons">
-            <a href="/mail.html" target="_blank" rel="noopener noreferrer" aria-label="Email Button">
-                <img src="assets/email-icon.svg" alt="Email icon" />
-            </a>
-
             <a href="https://x.com/ThereIsNoEarthB" target="_blank" rel="noopener noreferrer" aria-label="X Button">
-                <img src="assets/x-icon.svg" alt="X icon" />
+                <div class="social-icon-wrapper">
+                    <img src="assets/x-icon.svg" alt="X icon" />
+                </div>
             </a>
 
-            <a href="https://www.instagram.com/pudhe_chala/" class="instagram-btn" target="_blank"
-                rel="noopener noreferrer" aria-label="Instagram Button">
-                <img src="assets/instagram-icon.svg" alt="Instagram icon" />
+            <a href="https://www.instagram.com/pudhe_chala/" class="instagram-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram Button">
+                <div class="social-icon-wrapper">
+                    <img src="assets/instagram-icon.svg" alt="Instagram icon" />
+                </div>
             </a>
 
-            <a href="https://chat.whatsapp.com/Jv7cQ2spyKaD1D4qo4q55y" class="whatsapp-btn" target="_blank"
-                rel="noopener noreferrer" aria-label="WhatsApp Button">
-                <img src="assets/whatsapp-icon.svg" alt="WhatsApp icon" />
+            <a href="https://chat.whatsapp.com/Jv7cQ2spyKaD1D4qo4q55y" class="whatsapp-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Button">
+                <div class="social-icon-wrapper">
+                    <img src="assets/whatsapp-icon.svg" alt="WhatsApp icon" />
+                </div>
             </a>
         </div>
     </div>
